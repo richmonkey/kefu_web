@@ -47,7 +47,7 @@
     
 
 ##添加销售人员名称
-- 请求地址：** POST /api/stores/<store_id>/sellers**
+- 请求地址：** POST /api/stores/{store_id}/sellers**
 - 是否认证：是
 - 请求内容: application/x-www-form-urlencoded
 
@@ -55,7 +55,7 @@
 
 ##获取销售人员列表
 
-- 请求地址：** GET /api/stores/<store_id>/sellers**
+- 请求地址：** GET /api/stores/{store_id}/sellers**
 - 是否认证：是
 
 - 成功响应：200
@@ -64,13 +64,13 @@
     
 
 ##删除商店
-- 请求地址：** DELETE /api/stores/<store_id>**
+- 请求地址：** DELETE /api/stores/{store_id}**
 - 是否认证：是
 - 成功响应：200
 
 
 ##删除销售人员
-- 请求地址：** DELETE /api/stores/<store_id>/sellers/<seller_id>**
+- 请求地址：** DELETE /api/stores/{store_id}/sellers/{seller_id}**
 - 是否认证：是
 - 成功响应：200
     
