@@ -1,0 +1,72 @@
+{% extends "layout/register_template.html" %}
+{% block body %}
+    <div class="container">
+        <div class="process-bar">
+            <div class="process-wrapper">
+                <img src="{{ url_for('web.static', filename='themes/default/images/process_1.jpg') }}" alt="" />
+            </div>
+        </div>
+        <div class="login-wrapper register-wrapper">
+            <div class="center-section">
+                <div class="form-1 login-form">
+                    <form accept-charset="utf-8" method="post" action="">
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <th>
+                                        <div class="th">
+                                            <label class="label-1" for="login">邮箱:</label>
+                                        </div>
+                                    </th>
+                                    <td>
+                                        <div class="td">
+                                            <input type="text" class="ipt" size="30" maxlength="80" value="" name="email" id="email">
+                                            <p><span class="tips mr-5">请填写邮箱，做为登录帐号</span><span class="error">&nbsp;</span></p>    
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        <div class="th">
+                                            <label class="label-1" for="password">密码:</label>
+                                        </div>
+                                    </th>
+                                    <td>
+                                        <div class="td">
+                                            <input type="password" placeholder="密码至少6位" class="ipt" size="30" value="" name="password" id="password">
+                                            <p><span class="tips mr-5">6-16位，数字、字母、常见符号</span><span class="error">&nbsp;</span></p>    
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        <div class="th">
+                                            <label class="label-1" for="password_sure">确认密码:</label>
+                                        </div>
+                                    </th>
+                                    <td>
+                                        <div class="td">
+                                            <input type="password" class="ipt" size="30" value="" name="password_sure" id="password_sure">
+                                            <p><span class="tips mr-5">再次输入密码，以便确认</span><span class="error">&nbsp;</span></p>    
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th></th>
+                                    <td>
+                                        <a href="#" data-action="sendVerify" id="send_verify" class="btn btn-success">注册</a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </form>    
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block script %}
+    <script>
+        seajs.use('dist/app/user/register/index')
+    </script>
+{% endblock %}

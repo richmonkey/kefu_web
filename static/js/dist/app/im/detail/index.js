@@ -1,0 +1,1 @@
+define("dist/app/im/detail/index",["$","helper"],function(a){{var b=a("$");a("helper")}b(function(){})});

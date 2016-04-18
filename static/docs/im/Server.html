@@ -1,0 +1,441 @@
+<!doctype html>
+<!--[if lt IE 7]>
+<html class="no-js ie6 oldie"> <![endif]-->
+<!--[if IE 7]>
+<html class="no-js ie7 oldie"> <![endif]-->
+<!--[if IE 8]>
+<html class="no-js ie8 oldie"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js"> <!--<![endif]-->
+<head>
+    <meta charset="utf-8"/>
+    <title>文档中心</title>
+    <meta name="keywords" content="documentation,dox"/>
+    <meta name="description" content="项目开发相关文档"/>
+    <link rel="stylesheet" href="css/typo.css"/>
+    <link rel="stylesheet" href="css/im_doc.css"/>
+    <script src="js/prettify.js"></script>
+    <script src="js/jquery-1.8.2.min.js"></script>
+</head>
+<body>
+<div class="header">
+    <div class="inner-wrapper">
+        <div class="logo"><a href="/">GoBelieve文档中心</a></div>
+    </div>
+</div>
+
+<div class="outer-wrapper">
+
+<div class="sidebar">
+    <div class="wrapper">
+        <nav class="sidebar-nav">
+            <div class="sidebar-content">
+                <!--<h1 class="nav-title">推送文档</h1>-->
+                <ul>
+
+            <li  ><a href="./Android_SDK.html">Android开发文档</a><i class="disclosure"></i></li>
+
+            <li  ><a href="./IOS_SDK.html">IOS开发文档</a><i class="disclosure"></i></li>
+
+            <li  ><a href="./JS_SDK.html">JS开发文档</a><i class="disclosure"></i></li>
+
+            <li  class="active"  ><a href="./Server.html">服务器RestAPI文档</a><i class="disclosure"></i></li>
+
+</ul>
+
+            </div>
+        </nav>
+    </div>
+</div>
+<div class="main">
+    <div class="wrapper">
+        <div class="nav-page-content typo typo-selection" role="main">
+            <h1 id="restapi">RestAPI</h1>
+<h2 id="-">接口地址</h2>
+<ul>
+<li>正式:<a href="https://api.gobelieve.io">https://api.gobelieve.io</a></li>
+</ul>
+<h2 id="-token">获取用户token</h2>
+<ul>
+<li>第三方应用的客户端通过应用服务器作为桥梁获取连接im服务器使用到的token</li>
+<li>从im api服务器返回的用户token是永久有效的，第三方应用可以将token保存在自己的服务器</li>
+</ul>
+<h2 id="-">接口规范</h2>
+<h3 id="-4-http-">接口支持4种HTTP方法</h3>
+<ul>
+<li><strong>GET</strong> 获取对象</li>
+<li><strong>PUT</strong> 替换和更新对象</li>
+<li><strong>POST</strong> 创建新的对象</li>
+<li><strong>DELETE</strong> 删除对象</li>
+</ul>
+<h3 id="http-">HTTP返回码</h3>
+<ul>
+<li>200 成功</li>
+<li>其他 失败</li>
+</ul>
+<h3 id="http-">HTTP 接口返回值结构</h3>
+<pre><code>{
+    &quot;meta&quot;: 
+    {
+        &quot;code&quot;: &quot;业务码&quot;,
+        &quot;message&quot;: &quot;状态信息&quot;
+    },
+    &quot;data&quot;: ...
+}
+</code></pre><p><em>若无特殊说明以下接口响应结果指的是此结构的data字段的值。</em></p>
+<h3 id="-">第三方服务端授权</h3>
+<ul>
+<li>请求地址: 所有可供第三方服务端访问的接口</li>
+<li>请求头部: Authorization: Basic $base64(appid:$hex_md5(appsecret))</li>
+</ul>
+<h3 id="-">客户端授权</h3>
+<p>-请求头部: Authorization: Bearer $accesstoken</p>
+<h3 id="-access-token">第三方应用获取永久有效的access token</h3>
+<ul>
+<li>请求地址：<strong> POST /auth/grant</strong></li>
+<li>是否认证：服务端授权</li>
+<li><p>请求内容:</p>
+<pre><code>  {
+      &quot;uid&quot;:&quot;用户id（整型）&quot;
+      &quot;user_name&quot;:&quot;用户名&quot;
+  }
+</code></pre></li>
+<li><p>成功响应：200</p>
+<pre><code>  {
+      &quot;token&quot;:&quot;访问token&quot;
+  }
+</code></pre></li>
+<li><p>操作失败：
+400 非法参数</p>
+</li>
+</ul>
+<h3 id="-">设置用户名</h3>
+<ul>
+<li>请求地址：<strong> POST /users/{uid}</strong></li>
+<li>是否认证：服务端授权</li>
+<li><p>请求内容:</p>
+<pre><code>  {
+      &quot;name&quot;:&quot;用户名&quot;
+  }
+</code></pre></li>
+<li><p>成功响应：200</p>
+</li>
+<li><p>操作失败：
+400 非法参数</p>
+</li>
+</ul>
+<h3 id="-id-token">绑定用户id和推送token</h3>
+<ul>
+<li>请求地址：<strong>POST /device/bind </strong></li>
+<li>是否认证：客户端授权</li>
+<li><p>接口说明: 客户端只要设置特定平台的字段即可， apns_device_token对应IOS客户端</p>
+<pre><code>     ng_device_token对应android端使用内置推送的客户端
+     xg_device_token对应android端使用信鸽推送的客户端
+     同一平台的客户端后一个绑定的devicetoken会覆盖前一个客户端绑定的devicetoken
+</code></pre></li>
+<li><p>请求内容：</p>
+<pre><code>  {
+      &quot;apns_device_token&quot;: &quot;IOS设备token，16进制字符串(可选)&quot;,
+      &quot;ng_device_token&quot;: &quot;android设备token，16进制字符串(可选)&quot;,
+      &quot;xg_device_token&quot;: &quot;android 信鸽devicetoken(可选)&quot;
+      &quot;xm_device_token&quot;: &quot;android 小米推送的devicetoken(可选)&quot;
+      &quot;hw_device_token&quot;: &quot;android 华为推送的devicetoken(可选)&quot;
+      &quot;gcm_device_token&quot;: &quot;android google推送的devicetoken(可选)&quot;
+  }
+</code></pre></li>
+<li><p>成功响应 200</p>
+</li>
+<li><p>操作失败:
+状态码:400</p>
+</li>
+</ul>
+<h3 id="-id-token-">解除用户id和推送token之间的绑定</h3>
+<ul>
+<li>请求地址：<strong>POST /device/unbind </strong></li>
+<li>是否认证：客户端授权</li>
+<li>接口说明: 解绑请求的内容字段和绑定接口要求是一致的，即每个客户端只能解除本客户端绑定的token<pre><code>     不能解除其它客户端绑定的token
+</code></pre></li>
+<li><p>请求内容：</p>
+<pre><code>  {
+      &quot;apns_device_token&quot;: &quot;IOS设备token，16进制字符串(可选)&quot;,
+      &quot;ng_device_token&quot;: &quot;android设备token，16进制字符串(可选)&quot;,
+      &quot;xg_device_token&quot;: &quot;android 信鸽devicetoken(可选)&quot;
+      &quot;xm_device_token&quot;: &quot;android 小米推送的devicetoken(可选)&quot;
+      &quot;hw_device_token&quot;: &quot;android 华为推送的devicetoken(可选)&quot;
+      &quot;gcm_device_token&quot;: &quot;android google推送的devicetoken(可选)&quot;
+  }
+</code></pre></li>
+<li><p>成功响应 200</p>
+</li>
+<li><p>操作失败:
+状态码:400</p>
+</li>
+</ul>
+<h3 id="-">创建群组</h3>
+<ul>
+<li>请求地址：<strong>POST /groups</strong></li>
+<li>是否认证：服务端授权和客户端授权</li>
+<li>请求头:Content-Type:application/json</li>
+<li>请求内容:</li>
+</ul>
+<pre><code> {
+    &quot;master&quot;:&quot;管理员id(整型)&quot;,
+    &quot;name&quot;:&quot;群主题名&quot;,
+    &quot;super&quot;:&quot;超级群(布尔类型,可选)&quot;
+    &quot;members&quot;:[&quot;uid&quot;,...]
+ }
+</code></pre><ul>
+<li><p>成功响应：200</p>
+<p>  {</p>
+<pre><code>  &quot;group_id&quot;:&quot;群组id(整型)&quot;
+</code></pre><p>  }</p>
+</li>
+</ul>
+<ul>
+<li>操作失败:
+400 非法的输入参数</li>
+</ul>
+<h3 id="-">修改群组名称</h3>
+<ul>
+<li>请求地址：<strong>PATCH /groups/{gid}</strong></li>
+<li>是否认证：服务端授权和客户端授权</li>
+<li>请求头:Content-Type:application/json</li>
+<li>请求内容:</li>
+</ul>
+<pre><code> {
+    &quot;name&quot;:&quot;群主题名&quot;,
+ }
+</code></pre><ul>
+<li><p>成功响应：200</p>
+</li>
+<li><p>操作失败:
+400 非法的输入参数</p>
+</li>
+</ul>
+<h3 id="-">解散群组</h3>
+<ul>
+<li>请求地址：<strong>DELETE /groups/{gid}</strong></li>
+<li>是否认证：服务端授权和客户端授权</li>
+<li>成功响应：200</li>
+<li>操作失败：
+400 非法的群id</li>
+</ul>
+<h3 id="-">添加群组成员</h3>
+<ul>
+<li>请求地址：<strong>POST /groups/{gid}/members</strong></li>
+<li>是否认证：服务端授权和客户端授权</li>
+<li>请求头:Content-Type:application/json</li>
+<li><p>请求内容:</p>
+<p>  {</p>
+<pre><code>  &quot;uid&quot;:&quot;群成员id&quot;
+</code></pre><p>  }</p>
+<p>  or</p>
+<p>  [&quot;uid1&quot;, &quot;uid2&quot;, ...]</p>
+</li>
+</ul>
+<ul>
+<li>成功响应：200</li>
+<li>操作失败：
+400 非法的群成员id</li>
+</ul>
+<h3 id="-">离开群</h3>
+<ul>
+<li>请求地址：<strong>DELETE /groups/{gid}/members/{mid}</strong></li>
+<li>是否认证：服务端授权和客户端授权</li>
+<li>成功响应：200</li>
+<li>操作失败：
+400 非法参数</li>
+</ul>
+<h3 id="-">发送点对点消息</h3>
+<ul>
+<li>请求地址：<strong>POST /messages/peers</strong></li>
+<li>是否认证：服务端授权</li>
+<li>请求头:Content-Type:application/json</li>
+<li><p>请求内容:</p>
+<p>  {</p>
+<pre><code>  &quot;sender&quot;:&quot;发送者uid(整型)&quot;,
+  &quot;receiver&quot;:&quot;接受者uid(整型)&quot;,
+  &quot;content&quot;:&quot;消息内容&quot;,
+</code></pre><p>  }</p>
+</li>
+<li><p>成功响应：200</p>
+</li>
+<li>操作失败：
+状态码:400</li>
+</ul>
+<h3 id="-">发送群组消息</h3>
+<ul>
+<li>请求地址：<strong>POST /messages/groups</strong></li>
+<li>是否认证：服务端授权</li>
+<li>请求头:Content-Type:application/json</li>
+<li><p>请求内容:</p>
+<p>  {</p>
+<pre><code>  &quot;sender&quot;:&quot;发送者uid(整型)&quot;,
+  &quot;receiver&quot;:&quot;群组id(整型)&quot;,
+  &quot;content&quot;:&quot;消息内容&quot;,
+</code></pre><p>  }</p>
+</li>
+<li><p>成功响应：200</p>
+</li>
+<li>操作失败：
+状态码:400</li>
+</ul>
+<h3 id="-">发送系统消息</h3>
+<ul>
+<li>请求地址：<strong>POST /messages/systems</strong></li>
+<li>是否认证：服务端授权</li>
+<li>请求头:Content-Type:application/json</li>
+<li><p>请求内容:</p>
+<p>  {</p>
+<pre><code>  &quot;receiver&quot;:&quot;接受者id(整型)&quot;,
+  &quot;content&quot;:&quot;消息内容&quot;,
+</code></pre><p>  }</p>
+</li>
+<li><p>成功响应：200</p>
+</li>
+<li>操作失败：
+状态码:400</li>
+</ul>
+<h3 id="-">群组消息免打扰模式</h3>
+<ul>
+<li>请求地址：<strong>POST /notification/groups/{gid}</strong></li>
+<li>是否认证：客户端授权</li>
+<li>请求头:Content-Type:application/json</li>
+<li><p>请求内容:</p>
+<p>  {</p>
+<pre><code>  &quot;quiet&quot;:&quot;是否推送离线消息(整形) 0:推送通知 1:不推送通知&quot;
+</code></pre><p>  }</p>
+</li>
+<li><p>成功响应：200</p>
+</li>
+<li>操作失败：
+状态码:400</li>
+</ul>
+<h3 id="-">配置客服功能</h3>
+<ul>
+<li>请求地址：<strong>PATCH /applications/{appid}</strong></li>
+<li>是否认证：服务端授权</li>
+<li>请求头:Content-Type:application/json</li>
+<li><p>请求内容:</p>
+<p>  {</p>
+<pre><code>  &quot;customer_service&quot;:&quot;True:激活&quot;,
+  &quot;customer_service_mode&quot;:&quot;客服模式, 1:固定 2:在线 3:群发&quot;
+</code></pre><p>  }</p>
+</li>
+<li><p>成功响应：200</p>
+</li>
+<li>操作失败：
+状态码:400</li>
+</ul>
+<h3 id="-">添加客服</h3>
+<ul>
+<li>请求地址：<strong>POST /staffs</strong></li>
+<li>是否认证：服务端授权</li>
+<li>请求头:Content-Type:application/json</li>
+<li><p>请求内容:</p>
+<p>  {</p>
+<pre><code>  &quot;staff_uid&quot;:&quot;客服uid(整型)&quot;,
+  &quot;staff_name&quot;:&quot;客服名称&quot;
+</code></pre><p>  }</p>
+</li>
+<li><p>成功响应：200</p>
+<p> {</p>
+<pre><code>  &quot;id&quot;:&quot;客服id(整型)&quot;
+</code></pre><p> }</p>
+</li>
+</ul>
+<ul>
+<li>操作失败：
+状态码:400</li>
+</ul>
+<h3 id="-">删除客服</h3>
+<ul>
+<li>请求地址：<strong>DELETE /staffs/{staff_id}</strong></li>
+<li>是否认证：服务端授权</li>
+<li>请求头:Content-Type:application/json</li>
+</ul>
+<ul>
+<li>成功响应：200</li>
+<li>操作失败：
+状态码:400</li>
+</ul>
+<h3 id="-">客服人员上线\下线</h3>
+<ul>
+<li>请求地址：<strong>PATCH /staffs/{staff_id}</strong></li>
+<li>是否认证：服务端授权</li>
+<li><p>请求头:Content-Type:application/json</p>
+<p>  {</p>
+<pre><code>  &quot;state&quot;:&quot;online或者offline&quot;
+</code></pre><p>  }</p>
+</li>
+<li><p>成功响应：200</p>
+</li>
+<li>操作失败：
+状态码:400</li>
+</ul>
+
+        </div>
+    </div>
+</div>
+</div>
+<a href="#" class="btn-top" id="btn_top"><span class="vertical">回顶部</span></a>
+<script>
+    $(function () {
+        $('pre').addClass('prettyprint');
+        $('td pre').removeClass('prettyprint');
+        prettyPrint();
+        $('.response-btn').on('click', function (e) {
+            var sectionNode = $(this).closest('.api-section');
+            sectionNode.find('.api-response').slideToggle();
+        });
+        var navHtml = '';
+        var text = $('.nav-title-active').text();
+        if (text.indexOf('Android SDK') != -1 || text.indexOf('iOS SDK') != -1 || text.indexOf('服务端接入') != -1 || text.indexOf('服务端推送接口') != -1) {
+//            console.log(text);
+            //抽取标题索引
+            $('h1,h2,h3,h4,h5,h6').each(function (i) {
+                $(this).attr('id', 'anchor-' + i);
+            })
+        } else {
+//            navHtml += '<header><h1>' + text + '</h1></header>';
+        }
+        if ($('.api-section').length > 0) {
+            navHtml += '<div class="index-nav index-endpoints">';
+            navHtml += '    <ul>';
+            $('.api-section').each(function (item) {
+                var id = $(this).attr('id');
+                var method = $(this).find('.api-method').eq(0).text().toUpperCase();
+                var api = $(this).find('.api-rule').eq(0)[0].innerHTML;
+                var desc = $(this).find('.api-description').eq(0).find('p').eq(0).text();
+                navHtml += '        <li>';
+                navHtml += '            <a href="#' + id + '">';
+                navHtml += '                <span class="type">' + method + '</span>';
+                navHtml += '                <b>' + api + '</b>';
+                navHtml += '                <span class="description">' + desc + '</span>';
+                navHtml += '                <i></i>';
+                navHtml += '            </a>';
+                navHtml += '        </li>';
+            });
+            navHtml += '    </ul>';
+            navHtml += '</div>';
+        }
+        $('.nav-page-content').prepend(navHtml);
+        var sidebar = $('.sidebar');
+        $(window).on('scroll', function () {
+            var scrollTop = $(this).scrollTop();
+//            console.log(scrollTop);
+//            if (scrollTop > 62) {
+//                sidebar.css({'position': 'fixed', 'top': '0'});
+//            }else {
+//                sidebar.css({'position': 'absolute', 'top': 62});
+//            }
+            if (scrollTop > $(this).height()) {
+                $('#btn_top').show();
+            } else {
+                $('#btn_top').hide();
+            }
+        });
+    });
+</script>
+</body>
+</html>

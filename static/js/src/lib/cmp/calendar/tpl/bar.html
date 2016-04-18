@@ -1,0 +1,11 @@
+<div class="btn-bar">
+    <div class="widget-calendar-bar" data-role="bar">
+        {{if(bar.display.clear)}}
+        <input class="btn-s btn-info mr" type="button" value="{{bar.text.clear}}" data-role="btn-clear"/>
+        {{endif}}
+
+        {{if(bar.display.ok)}}
+        <input class="btn-s btn-info" type="button" value="{{bar.text.ok}}" data-role="btn-ok"/>
+        {{endif}}
+    </div>   
+</div>

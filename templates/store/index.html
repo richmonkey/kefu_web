@@ -1,0 +1,50 @@
+{% extends "layout/im.html" %}
+
+{% block body %}
+  <div class="container">
+    <div class="breadcrumb">
+      <div class="inner-wrapper">
+        <ol>
+          <li class="active">
+          <span>商店列表</span>
+          </li>
+        </ol>
+      </div>
+    </div>
+    <div class="inner-wrapper">
+      <div class="one-wrapper">
+        <div class="panel">
+          <div class="opt-bar clearfix">
+            <a href="/store/add" class="rt btn-s btn-success" data-action="redirect">添加商店</a>
+            <input type="hidden" name="" id="offset" value="{{ data.offset }}"/>
+          </div>
+          <input type="hidden" name="" id="offset" value="{{data.offset}}" />
+          <div class="game-table">
+            <table>
+              <tr>
+                <th><span>商店名称</span></th
+              </tr>
+              {% for item in data.list %}
+                <tr>
+                  <td>
+                    <a href="/store/detail/{{item.id}}">{{item.name}}</a>
+                  </td>
+                </tr>
+              {% else %}
+                <tr>
+                  <td colspan="5"><div class="none-data">无数据</div></td>
+                </tr>
+              {% endfor %}
+            </table>
+          </div>
+          <div class="opt-bar pagination-bar text-align-right">
+            {{ pagination('web.store_index', data.pagination) }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+{% block script %}
+  <script>seajs.use('dist/app/im/index/index');</script>
+{% endblock %}

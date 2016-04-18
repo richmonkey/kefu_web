@@ -1,0 +1,57 @@
+{#
+    data:
+        rows_found: 总数
+        limit: 每页数
+        total_page: 总页数
+        offset: 下一页的起始偏移量
+        url: 提供给url的分页地址
+        params: 其他参数字典形式
+        box: pjax的容器, 默认#datagrid
+#}
+{% if data.total_page > 0 and data.total_page >= data.current and data.current > 0 %}
+<div class="pagination rt">
+    <a  class="previous {% if data.current <= 1 %}disabled{% endif %}" data-pjax="{{ data.box or '#main' }}"
+       {% if data.current > 1 %} href="{{ url_for(data.url, offset=data.prev_offset, limit=data.limit, **(data.params or {})) }}"{% endif %}>上一页</a>
+    {% if data.total_page > 5 and data.current > 3 %}
+        <a  class="first" data-pjax="{{ data.box or '#main' }}" href="{{ url_for(data.url, offset=0, limit=data.limit, **(data.params or {})) }}">1</a>
+    {% endif %}
+    <span>
+    {% if data.total_page <= 5 %}
+        {% for i in range(1, data.total_page + 1) %}
+            <a  {% if data.current == i %}class="active"{% endif %}  data-pjax="{{ data.box or '#main' }}"
+               href="{{ url_for(data.url, offset= (i - 1) * data.limit, limit=data.limit, **(data.params or {})) }}">{{ i }}</a>
+        {% endfor %}
+    {% else %}
+        {% if data.current <= 3 %}
+            {% for i in range(1, 5) %}
+                <a  {% if data.current == i %}class="active"{% endif %}  data-pjax="{{ data.box or '#main' }}"
+                   href="{{ url_for(data.url, offset=(i - 1) * data.limit, limit=data.limit, **(data.params or {})) }}">{{ i }}</a>
+            {% endfor %}
+            <span>...</span>
+        {% elif data.current >= data.total_page - 2 %}
+            <span>...</span>
+            {% for i in range(1, 5)%}
+                <a  {% if data.current == data.total_page - 4 + i %}class="active"{% endif %} data-pjax="{{ data.box or '#main' }}"
+                         href="{{ url_for(data.url, offset=(data.total_page - 5 + i) * data.limit, limit=data.limit, **(data.params or {})) }}">{{ data.total_page - 4 + i }}</a>
+            {% endfor %}
+        {% else %}
+            <span>...</span>
+            <a  data-pjax="{{ data.box or '#main' }}"
+               href="{{ url_for(data.url, offset=(data.current - 2) * data.limit, limit=data.limit, **(data.params or {})) }}">{{ data.current - 1 }}</a>
+            <a  data-pjax="{{ data.box or '#main' }}"
+               class="active" href="{{ url_for(data.url, offset=(data.current - 1) * data.limit, limit=data.limit, **(data.params or {})) }}">{{ data.current }}</a>
+            <a  data-pjax="{{ data.box or '#main' }}"
+               href="{{ url_for(data.url, offset=data.current  * data.limit, limit=data.limit, **(data.params or {})) }}">{{ data.current + 1 }}</a>
+            <span>...</span>
+        {% endif %}
+    {% endif %}
+    </span>
+    {% if data.total_page > 5 and data.current < data.total_page - 2 %}
+        <a  class="last" data-pjax="{{ data.box or '#main' }}"
+           href="{{ url_for(data.url, offset=(data.total_page - 1 ) * data.limit, limit=data.limit, **data.params) }}">{{ data.total_page }}</a>
+    {% endif %}
+    <a  class="next {% if data.current >= data.total_page%}disabled{% endif %}" data-pjax="{{ data.box or '#main' }}"
+            {% if data.current < data.total_page %}href="{{ url_for(data.url, offset=(data.current) * data.limit, limit=data.limit, **data.params) }}"{% endif %}
+            >下一页</a>
+</div>
+{% endif %}

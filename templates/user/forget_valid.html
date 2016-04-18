@@ -1,0 +1,22 @@
+{% extends "layout/register_template.html" %}
+{% block body %}
+    <div class="container">
+        <div class="login-wrapper">
+            <div class="center-section">
+                <div class="valid-forget-wrapper">
+                    <input id="error" name="" type="hidden" value="{{data.error}}"/>
+                    <p id="label" class="detail">我们已发送了一封重置密码的邮件到您的邮箱 <span id="email">{{data.mail}}</span>, 请注意查收
+                    {% if data.redirect %}
+                    <p><a href="{{data.redirect}}" class="btn btn-success" target="_blank">前往查收</a></p>
+                    {% endif %}    
+                </div>
+                
+            </div>
+        </div>
+    </div>
+    <!--<script src="{{ url_for('web.static', filename='js/seajs/sea.js') }}"></script>
+    <script src="{{ url_for('web.static', filename='js/config.js') }}"></script>
+    <script>
+        seajs.use('dist/app/user/forget_valid/index')
+    </script>-->
+{% endblock %}

@@ -1,0 +1,44 @@
+%breadcrumb {
+    padding: 17px 15px;
+    list-style: none;
+    background-color: #e4e6e8;
+    border-radius: 4px;
+    @include clearfix;
+    z-index: -1;
+    li {
+        float: left;
+        padding-right: 10px;
+        line-height: 24px;
+        vertical-align: middle;
+        &.active {
+            color: #999;
+        }
+        &.arrow {
+            color: #999;
+        }
+        a, span, label {
+            font-size: 16px;
+            color: #505050;
+            line-height: 24px;
+            vertical-align: middle;
+            &:hover {
+                color: #505050;
+                text-decoration: none;
+            }
+        }
+        a {
+            &:hover {
+                color: #79c9ff;
+            }
+        }
+        select {
+            width: 100px;
+            line-height: 24px;
+            vertical-align: middle;
+        }
+    }
+}
+
+.breadcrumb {
+    @extend %breadcrumb;
+}

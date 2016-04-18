@@ -1,0 +1,28 @@
+.widget-calendar-time {
+  border-collapse: collapse;
+  margin-left: 80px;
+  font: 11px "lucida grande", tahoma, verdana, sans-serif;
+  line-height: 14px;
+  td {
+    padding: 2px 0 2px 5px;
+  }
+  input {
+    width: 20px;
+    font-weight: bold;
+    font-size: 120%;
+  }
+}
+
+.widget-calendar-up {
+  background: url("../images/time-up.png") no-repeat 50% 50%;
+  width: 11px;
+  height: 8px;
+  opacity: 0.5;
+}
+
+.widget-calendar-down {
+  background: url("../images/time-down.png") no-repeat 50% 50%;
+  width: 11px;
+  height: 8px;
+  opacity: 0.5;
+}

@@ -1,0 +1,15 @@
+flask
+flask-mail
+requests
+gevent
+git+git://github.com/esnme/ultramysql.git#egg=umysql
+redis>=2.10.0
+supervisor
+uwsgi
+pycrypto
+markdown
+pyopenssl
+raven
+blinker
+selenium
+service_identity

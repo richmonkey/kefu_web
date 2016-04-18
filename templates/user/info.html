@@ -1,0 +1,36 @@
+{% extends "layout/user_template.html" %}
+{% block content %}
+    <div class="content-extra">
+        <div class="user-info-table">
+            <div class="table-4">
+                <table>
+                    <tr>
+                        <th>
+                            <div class="th"><span>账号</span></div>
+                        </th>
+                        <td>
+                            <div class="td">
+                                <span>{{ data.data.email }}</span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            <div class="th"><span>账号类型</span></div>
+                        </th>
+                        <td>
+                            <div class="td">
+                                <span>{{ '开发者' if data.data.role == 1 else '未知' }}</span>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block script %}
+    <script>
+        seajs.use('dist/app/user/info/index');
+    </script>
+{% endblock %}

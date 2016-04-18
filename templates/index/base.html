@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>GoBelieve-国内唯一开源IM服务</title>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="stylesheet"
+          href="{{ url_for('web.static', filename='themes/bootstrap/css/index.css', v='0.12',_external=true) }}"/>
+    <script src="{{ url_for('web.static', filename='js/website/lib/jquery.min.js',_external=true) }}"></script>
+</head>
+<body class="{{ "home" if g.uri_path == '/' }}">
+<div class="header">
+    <div class="container">
+        <nav class="navbar">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar"
+                    aria-expanded="true" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#"><img
+                    src="{{ url_for('web.static', filename='themes/bootstrap/images/logo.png',_external=true) }}"
+                    alt=""/></a>
+
+            <div class="container-fluid">
+                <div id="navbar" class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="active"><a href="{{ url_for('web.index',_external=true) }}">首页</a></li>
+                        <li><a href="{{ url_for('web.price',_external=true) }}">价格</a></li>
+                        <li><a href="{{ url_for('web.contact',_external=true) }}">联系我们</a></li>
+                        <li><a class="btn-5" href="{{ url_for('store.store_index',_external=true) }}">登录</a></li>
+                        <li><a class="btn-6" href="{{ url_for('account.user_register',_external=true) }}">注册</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </div>
+</div>
+<div class="main">
+    {% block body %}
+    {% endblock %}
+</div>
+<div class="footer">
+    <div class="container">
+        <p class="hot-word">
+            GoBelieve 让您感受全新开发体验
+        </p>
+
+        <div class="btn-wrap">
+            <a href="{{ url_for('store.store_index',_external=true) }}" class="btn-4">马上接入</a>
+        </div>
+    </div>
+    <div class="bottom">
+        <div class="sub-menu">
+            <a href="{{ url_for('web.index',_external=true) }}">首页</a>
+            <a href="{{ url_for('web.price',_external=true) }}">价格</a>
+            <a href="https://github.com/GoBelieveIO" target="_blank">源代码</a>
+            <a href="{{ url_for('web.contact',_external=true) }}">联系我们</a>
+        </div>
+        <p class="copyright">
+            © Copyright <span>gobelieve.io</span> All Rights Reserved
+        </p>
+    </div>
+</div>
+<script src="{{ url_for('web.static', filename='js/bootstrap.min.js', v='0.12',_external=true) }}"></script>
+
+<script type="text/javascript"
+        src="{{ url_for('web.static', filename='js/website/lib/jweixin-1.0.0.js',_external=True) }}"></script>
+<script>
+    wx.config({
+        debug: false,
+        appId: '{{ sign.appid }}',
+        timestamp: '{{ sign.timestamp }}',
+        nonceStr: '{{ sign.nonceStr }}',
+        signature: '{{ sign.signature }}',
+        jsApiList: ['checkJsApi', 'onMenuShareTimeline', 'onMenuShareAppMessage', 'onMenuShareQQ']
+    });
+    wx.ready(function () {
+        //分享到朋友圈
+        wx.onMenuShareTimeline({
+            title: 'GoBelieve-国内唯一开源IM服务!',
+            link: '{{ url_for('web.index',_external=True) }}',
+            imgUrl: '{{ url_for('web.static', filename='themes/bootstrap/images/logo_2.png',_external=True) }}',
+            success: function () {
+            },
+            cancel: function () {
+
+            }
+        });
+        //分享给朋友
+        wx.onMenuShareAppMessage({
+            title: 'GoBelieve-国内唯一开源IM服务',
+            desc: '一小时接入、自由定制、完全开源、私有云部署',
+            link: '{{ url_for('web.index',_external=True) }}',
+            imgUrl: '{{ url_for('web.static', filename='themes/bootstrap/images/logo_2.png',_external=True) }}',
+            type: '',
+            dataUrl: '',
+            success: function () {
+            },
+            cancel: function () {
+
+            }
+        });
+        //分享到qq
+        wx.onMenuShareQQ({
+            title: 'GoBelieve-国内唯一开源IM服务',
+            desc: '一小时接入、自由定制、完全开源、私有云部署',
+            link: '{{ url_for('web.index',_external=True) }}',
+            imgUrl: '{{ url_for('web.static', filename='themes/bootstrap/images/logo_2.png',_external=True) }}',
+            success: function () {
+            },
+            cancel: function () {
+
+            }
+        });
+    });
+    wx.error(function (res) {
+//            {#            alert(res.errMsg);#}
+    });
+</script>
+
+</body>
+</html>

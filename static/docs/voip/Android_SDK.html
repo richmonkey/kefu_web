@@ -1,0 +1,300 @@
+<!doctype html>
+<!--[if lt IE 7]>
+<html class="no-js ie6 oldie"> <![endif]-->
+<!--[if IE 7]>
+<html class="no-js ie7 oldie"> <![endif]-->
+<!--[if IE 8]>
+<html class="no-js ie8 oldie"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js"> <!--<![endif]-->
+<head>
+    <meta charset="utf-8"/>
+    <title>文档中心</title>
+    <meta name="keywords" content="documentation,dox"/>
+    <meta name="description" content="项目开发相关文档"/>
+    <link rel="stylesheet" href="css/typo.css"/>
+    <link rel="stylesheet" href="css/im_doc.css"/>
+    <script src="js/prettify.js"></script>
+    <script src="js/jquery-1.8.2.min.js"></script>
+</head>
+<body>
+<div class="header">
+    <div class="inner-wrapper">
+        <div class="logo"><a href="/">GoBelieve文档中心</a></div>
+    </div>
+</div>
+
+<div class="outer-wrapper">
+
+<div class="sidebar">
+    <div class="wrapper">
+        <nav class="sidebar-nav">
+            <div class="sidebar-content">
+                <!--<h1 class="nav-title">推送文档</h1>-->
+                <ul>
+
+            <li  class="active"  ><a href="./Android_SDK.html">Android开发文档</a><i class="disclosure"></i></li>
+
+            <li  ><a href="./IOS_SDK.html">IOS开发文档</a><i class="disclosure"></i></li>
+
+            <li  ><a href="./Server.html">服务器RestAPI文档</a><i class="disclosure"></i></li>
+
+</ul>
+
+            </div>
+        </nav>
+    </div>
+</div>
+<div class="main">
+    <div class="wrapper">
+        <div class="nav-page-content typo typo-selection" role="main">
+            <h1 id="voip-android-sdk-">VOIP android SDK 接入指南</h1>
+<ul>
+<li>VOIP sdk由两个模块组成，首先使用VOIPSession建立会话，之后使用VOIPEngine传输实时语音数据</li>
+</ul>
+<h2 id="-voipengine-voipsession-android-studio-">将voipengine, voipsession加入android studio工程</h2>
+<ul>
+<li>打开菜单 File-&gt;New Module-&gt;Import .JAR or .AAR Package,分别导入voipengine.aar voipsession.aar asynctcp.aar</li>
+<li>将libvoip.so libstun.so libasync_tcp.so 放到工程的libs/armeabi-v7a目录下</li>
+</ul>
+<h2 id="-cpu-">支持CPU类型</h2>
+<ul>
+<li>当前voipengine只支持armeabi-v7a</li>
+</ul>
+<h2 id="voipsession">VOIPSession</h2>
+<ul>
+<li>voipsession 用于建立会话连接</li>
+<li>由于android平台没有一个稳定的推送通道，所以VOIP的服务端未推送呼叫通知到客户端
+这就要求应用本身要保持VOIPService的存活，才能接收到远端通话的呼叫请求</li>
+</ul>
+<h3 id="-voipservice">初始化VOIPService</h3>
+<pre><code>    //app可以单独部署服务器，给予第三方应用更多的灵活性
+    //在开发阶段也可以配置成测试环境的地址 &quot;sandbox.voipnode.gobelieve.io&quot;
+    String sdkHost = &quot;voipnode.gobelieve.io&quot;;
+    VOIPService.getInstance().setHost(sdkHost);
+
+    String androidID = Settings.Secure.getString(getContentResolver(),
+            Settings.Secure.ANDROID_ID);
+
+    //监听网络状态变化
+    VOIPService.getInstance().registerConnectivityChangeReceiver(getApplicationContext());
+    VOIPService.getInstance().setDeviceID(androidID);
+
+    //初始化webrtc
+    new NativeWebRtcContextRegistry().register(getApplicationContext());
+</code></pre><h3 id="-token-voipservice">得到token后启动VOIPService</h3>
+<pre><code>     VOIPService.getInstance().setToken(token);
+     VOIPService.getInstance().start();
+</code></pre><h3 id="-">设置观察者</h3>
+<ul>
+<li><p>VOIPService 观察者可以收到远端的拨号命令</p>
+<pre><code>   VOIPService.getInstance().pushVOIPObserver(ob);
+</code></pre></li>
+</ul>
+<h3 id="-voipsession">创建VOIPSession</h3>
+<pre><code>    voipSession = new VOIPSession(currentUID, peerUID);
+    //voipsession实例接受会话的控制命令
+    VOIPService.getInstance().pushVOIPObserver(voipSession);
+
+    //设置voipsession的观察者
+    voipSession.setObserver(this);
+    //开始路由器打洞
+    voipSession.holePunch();
+</code></pre><ul>
+<li><p>主动呼叫</p>
+<pre><code>  //呼叫对方
+  voipSession.dial();
+</code></pre></li>
+<li><p>被动接听</p>
+<pre><code>  //用户确认接听后调用
+  voipSession.accept();
+</code></pre></li>
+</ul>
+<h3 id="-voipsession">销毁VOIPSession</h3>
+<pre><code>    //不在监听VOIPService接受到的控制命令
+    VOIPService.getInstance().popVOIPObserver(voipSession);
+</code></pre><h2 id="-voipservice">类VOIPService</h2>
+<h3 id="-access-token">设置当前用户的access token</h3>
+<pre><code>方法名：public void setAccessToken(String token)
+功能：在调用start之前必须要设置用户的accessToken，token是由第三方应用服务器调用IM服务器RestAPI所得。
+参数说明： 
+    * token  客户端连接IM服务必须的acessToken
+返回值：无返回值
+</code></pre><h3 id="-id">设置当前设备的id</h3>
+<pre><code>方法名：public void setDeviceID(String deviceID)
+功能：设备id可以用户多点登陆的唯一性判断,可选调用
+参数说明：
+    *deviceID 设备id
+返回值：无返回值
+</code></pre><h3 id="-">监控网络变化</h3>
+<pre><code>方法名: public void registerConnectivityChangeReceiver(Context context)
+功能: 可以及时的根据网络变化情况，断开，建立socket链接。
+</code></pre><h3 id="-">设置观察者</h3>
+<pre><code>方法名: public void addObserver(IMServiceObserver observer)
+功能：设置observer，在observer中处理接受到的消息。
+参数说明： 
+    * observer 观察者
+返回值：无返回值
+</code></pre><h3 id="-">开始接受消息</h3>
+<pre><code>方法名：public void start()
+功能：用户登陆成功后，连接im服务器来接受在线消息。
+</code></pre><h3 id="-">停止接受消息</h3>
+<pre><code>方法名：public void stop()
+功能：用户注销后，断开和im服务器的连接，从而终止接受在线消息。
+</code></pre><h2 id="-voipserviceobserver">接口VOIPServiceObserver</h2>
+<h3 id="-">连接状态</h3>
+<pre><code>方法名:public void onConnectState(IMService.ConnectState state)
+功能:连接状态变更通知
+参数说明:
+    *state 连接的状态 STATE_UNCONNECTED, STATE_CONNECTING, STATE_CONNECTED, STATE_CONNECTFAIL
+返回值:无返回值
+</code></pre><h3 id="-">异地登陆</h3>
+<pre><code>方法名: public void onLoginPoint(LoginPoint lp)
+功能:当前登陆用户在异地登陆
+参数说明:
+    *lp 登录点信息
+返回值:无返回值
+</code></pre><h3 id="-voipsession">类VOIPSession</h3>
+<h4 id="-">构造函数</h4>
+<pre><code>参数说明:
+    *currentUID 当前登录用户ID
+    *peerUID    对端用户ID
+</code></pre><h4 id="-">设置观察者</h4>
+<pre><code>方法名:void setObserver(VOIPSessionObserver ob)
+功能:设置session对象的观察者，得到session状态变化的通知
+</code></pre><h4 id="-ip">获取中转服务器IP</h4>
+<pre><code>方法名:String getRelayIP()
+功能:在建立会话过程中，会使用呼叫方连接的voip服务器ip作为中转服务器
+</code></pre><h4 id="-">获取中转服务器的端口号</h4>
+<pre><code>静态配置:static final int VOIP_PORT
+</code></pre><h4 id="-ip-">对端公网ip和端口</h4>
+<pre><code>公有变量:public VOIPControl.NatPortMap peerNatMap
+功能:获取对方的公网ip和端口，用来进行p2p传输
+</code></pre><h4 id="-">打洞</h4>
+<pre><code>方法名:void holePunch()
+功能:路由器穿透
+</code></pre><h4 id="-">呼叫</h4>
+<pre><code>方法名:void dial()
+功能：呼叫对方
+</code></pre><h4 id="-">接听</h4>
+<pre><code>方法名:void accept()
+功能：接听来电
+</code></pre><h4 id="-">拒绝</h4>
+<pre><code>方法名:void refuse()
+功能：拒绝来电
+</code></pre><h4 id="-">挂断</h4>
+<pre><code>方法名:void hangUp()
+功能:停止当前呼叫或者挂断当前通话
+</code></pre><h3 id="-voipsessionobserver">观察者 VOIPSessionObserver</h3>
+<h3 id="-">对端拒绝</h3>
+<pre><code>方法名:void onRefuse()
+功能:对端拒绝接听来电
+</code></pre><h3 id="-">通话被挂断</h3>
+<pre><code>方法名:void onHangUp()
+功能:对方挂断当前通话，此时本地可能处于等待接听状态或者通话中状态
+</code></pre><h3 id="-">呼叫超时</h3>
+<pre><code>方法名:void onDialTimeout()
+功能：呼叫对方超过60s后，对方未有任何应答
+</code></pre><h3 id="-">接听超时</h3>
+<pre><code>方法名:void onAcceptTimeout()
+功能：在确认接听后，10s内未能和呼叫方建立通话连接，对方可能突然关机或者中断网络才会导致出现此等情况
+</code></pre><h3 id="-">连接建立</h3>
+<pre><code>方法名:void onConnected()
+功能:通话连接已经建立，此时可以调用VOIPEngine开始语音传输
+</code></pre><h3 id="-">拒绝成功</h3>
+<pre><code>方法名:void onRefuseFinished()
+功能:对方已经知晓本地的拒绝操作，此时可以销毁session对象，重新进入到等待呼叫的状态
+</code></pre><h2 id="-voipengine">类VOIPEngine</h2>
+<ul>
+<li>voipengine 处理语音的采集，编码， 传输，去噪，回声消除，播放</li>
+<li>在会话建立后再创建VOIPEngine,通话结束后销毁VOIPEngine</li>
+</ul>
+<h3 id="-voipengine">初始化VOIPEngine</h3>
+<pre><code>方法名:void initNative(String token, long selfUID, long peerUID, String relayIP, int voipPort, String peerIP, int peerPort, boolean isHeadphone)
+功能:创建VOIPEngine关联的C++对象
+参数说明:
+    *token 当前用户token，中转服务器校验时使用
+    *selfUID 当前用户ID
+    *peerUID 对端ID
+    *relayIP 中转服务器的IP, 从VIOPSession对象中获取
+    *voipPort 中转服务器端口, 从VIOPSession对象中获取
+    *peerIP 对端的公网IP, 从VIOPSession对象中获取
+    *peerPort 对端的公网端口, 从VIOPSession对象中获取
+    *isHeadphone 当前手机是否使用耳机
+</code></pre><h3 id="-voipengine">销毁VOIPEngine</h3>
+<pre><code>方法名:void destroyNative()
+功能:销毁VOIPEngine关联的C++对象
+</code></pre><h3 id="-">开始语音流</h3>
+<pre><code>方法名:void start()
+功能：开始语音数据的采集传输，接受对方的语音数据并播放.
+     如果设置了对端ip和port，那么前一分钟数据会直接传给对方，而不经过服务器，如果一分钟内
+     已方还为收到对端的语音数据，那么就会认为路由器打洞失败，转而使用中转服务器传输.
+</code></pre><h3 id="-">停止语音流</h3>
+<pre><code>方法名:void stop()
+功能：结束语音的采集，停止接受对方的语音数据
+</code></pre>
+        </div>
+    </div>
+</div>
+</div>
+<a href="#" class="btn-top" id="btn_top"><span class="vertical">回顶部</span></a>
+<script>
+    $(function () {
+        $('pre').addClass('prettyprint');
+        $('td pre').removeClass('prettyprint');
+        prettyPrint();
+        $('.response-btn').on('click', function (e) {
+            var sectionNode = $(this).closest('.api-section');
+            sectionNode.find('.api-response').slideToggle();
+        });
+        var navHtml = '';
+        var text = $('.nav-title-active').text();
+        if (text.indexOf('Android SDK') != -1 || text.indexOf('iOS SDK') != -1 || text.indexOf('服务端接入') != -1 || text.indexOf('服务端推送接口') != -1) {
+//            console.log(text);
+            //抽取标题索引
+            $('h1,h2,h3,h4,h5,h6').each(function (i) {
+                $(this).attr('id', 'anchor-' + i);
+            })
+        } else {
+//            navHtml += '<header><h1>' + text + '</h1></header>';
+        }
+        if ($('.api-section').length > 0) {
+            navHtml += '<div class="index-nav index-endpoints">';
+            navHtml += '    <ul>';
+            $('.api-section').each(function (item) {
+                var id = $(this).attr('id');
+                var method = $(this).find('.api-method').eq(0).text().toUpperCase();
+                var api = $(this).find('.api-rule').eq(0)[0].innerHTML;
+                var desc = $(this).find('.api-description').eq(0).find('p').eq(0).text();
+                navHtml += '        <li>';
+                navHtml += '            <a href="#' + id + '">';
+                navHtml += '                <span class="type">' + method + '</span>';
+                navHtml += '                <b>' + api + '</b>';
+                navHtml += '                <span class="description">' + desc + '</span>';
+                navHtml += '                <i></i>';
+                navHtml += '            </a>';
+                navHtml += '        </li>';
+            });
+            navHtml += '    </ul>';
+            navHtml += '</div>';
+        }
+        $('.nav-page-content').prepend(navHtml);
+        var sidebar = $('.sidebar');
+        $(window).on('scroll', function () {
+            var scrollTop = $(this).scrollTop();
+//            console.log(scrollTop);
+//            if (scrollTop > 62) {
+//                sidebar.css({'position': 'fixed', 'top': '0'});
+//            }else {
+//                sidebar.css({'position': 'absolute', 'top': 62});
+//            }
+            if (scrollTop > $(this).height()) {
+                $('#btn_top').show();
+            } else {
+                $('#btn_top').hide();
+            }
+        });
+    });
+</script>
+</body>
+</html>

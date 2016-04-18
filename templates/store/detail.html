@@ -1,0 +1,59 @@
+{% extends "layout/im_with_sidebar.html" %}
+
+{% macro inline_field(label, required=False, extra_class="", wrapper_class="") -%}
+  <tr class="{{ wrapper_class }}">
+    <th>
+      <div class="th">
+        <label class="label-1">
+          {% if required %}<span class="star">*</span>{% endif %}
+          {{ label }}
+        </label>
+      </div>
+    </th>
+    <td>
+      <div class="td {{ extra_class }}">
+        {{ caller() }}
+      </div>
+    </td>
+  </tr>
+{%- endmacro %}
+
+{% block content_inner %}
+  <table>
+    <tbody>
+      {% call inline_field('商店ID:') %}
+        <p class="show-edit">
+          <span class="name">{{ data.store_info.id }}</span>
+        </p>
+      {% endcall %}
+
+      {% call inline_field('商店名称:') %}
+        <p class="show-edit">
+          <span class="name">{{ data.store_info.name }}</span>
+        </p>
+      {% endcall %}
+    </tbody>
+  </table>
+{% endblock %}
+
+{% block content %}
+  <div class="push-notice-wrapper">
+    <div class="container">
+      <div class="center-form">
+        <div class="center-section">
+          <div class="form-1 detail-single-form">
+            <form accept-charset="utf-8" method="post" action="">
+              {{ self.content_inner() }}
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block script %}
+  <script>
+    seajs.use('dist/app/im/detail/index');
+  </script>
+{% endblock %}

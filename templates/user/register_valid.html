@@ -1,0 +1,39 @@
+{% extends "layout/register_template.html" %}
+{% block body %}
+    <div class="container">
+        <div class="process-bar">
+            <div class="process-wrapper">
+                <img src="{{ url_for('web.static', filename='themes/default/images/process_2.jpg') }}" width="678" height="242" alt="" />
+            </div>
+        </div>
+        <div class="login-wrapper register-wrapper">
+            <div class="center-section">
+                <div class="form-1 login-form">
+                    <fieldset><legend>验证邮件</legend></fieldset>
+                    <div class="valid-wrapper">
+                        <p>激活邮件已发送到您的邮箱: <span class="blue">{{data.mail}}</span></p>
+                        <p>请在24小时内进入您的邮箱收信，按照邮件中的提示完成帐号激活</p>
+                        <div class="btn-area clearfix">
+                            {% if data.redirect %}
+                            <a href="{{data.redirect}}" class="btn-s btn-info mr lf" target="_blank">打开邮箱</a>
+                            {% endif %}
+                            <a href="#" data-action="resend" class="btn-s btn-success lf">重发激活邮件</a>
+                        </div>
+                        <div class="tip-wrapper">
+                            <p class="tip-error"><i></i>收不到邮件</p>
+                            <p class="tips"><i></i>看看是否在邮箱的广告邮件、垃圾邮件中</p>
+                            <p class="tips"><i></i>确认没收到，<a href="#" data-action="resend" target="_blank">重新发送</a>一封激活邮件</p>
+                            <p class="tips"><i></i>上述邮箱地址错误，请<a href="/register" target="_blank">重新注册</a></p>
+                            <p class="tips"><i></i>依然收不到请与客服联系：dev@GoBeliever.com</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block script %}
+    <script>
+        seajs.use('dist/app/user/valid/index')
+    </script>
+{% endblock %}

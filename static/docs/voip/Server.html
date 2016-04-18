@@ -1,0 +1,206 @@
+<!doctype html>
+<!--[if lt IE 7]>
+<html class="no-js ie6 oldie"> <![endif]-->
+<!--[if IE 7]>
+<html class="no-js ie7 oldie"> <![endif]-->
+<!--[if IE 8]>
+<html class="no-js ie8 oldie"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js"> <!--<![endif]-->
+<head>
+    <meta charset="utf-8"/>
+    <title>文档中心</title>
+    <meta name="keywords" content="documentation,dox"/>
+    <meta name="description" content="项目开发相关文档"/>
+    <link rel="stylesheet" href="css/typo.css"/>
+    <link rel="stylesheet" href="css/im_doc.css"/>
+    <script src="js/prettify.js"></script>
+    <script src="js/jquery-1.8.2.min.js"></script>
+</head>
+<body>
+<div class="header">
+    <div class="inner-wrapper">
+        <div class="logo"><a href="/">GoBelieve文档中心</a></div>
+    </div>
+</div>
+
+<div class="outer-wrapper">
+
+<div class="sidebar">
+    <div class="wrapper">
+        <nav class="sidebar-nav">
+            <div class="sidebar-content">
+                <!--<h1 class="nav-title">推送文档</h1>-->
+                <ul>
+
+            <li  ><a href="./Android_SDK.html">Android开发文档</a><i class="disclosure"></i></li>
+
+            <li  ><a href="./IOS_SDK.html">IOS开发文档</a><i class="disclosure"></i></li>
+
+            <li  class="active"  ><a href="./Server.html">服务器RestAPI文档</a><i class="disclosure"></i></li>
+
+</ul>
+
+            </div>
+        </nav>
+    </div>
+</div>
+<div class="main">
+    <div class="wrapper">
+        <div class="nav-page-content typo typo-selection" role="main">
+            <h1 id="restapi">RestAPI</h1>
+<h2 id="-">接口地址</h2>
+<ul>
+<li>正式:<a href="http://api.gobelieve.io">http://api.gobelieve.io</a> 沙盒:<a href="http://sandbox.api.gobelieve.io">http://sandbox.api.gobelieve.io</a></li>
+</ul>
+<h2 id="-token">获取用户token</h2>
+<ul>
+<li>第三方应用的客户端通过应用服务器作为桥梁获取连接im服务器使用到的token</li>
+<li>从im api服务器返回的用户token是永久有效的，第三方应用可以将token保存在自己的服务器</li>
+</ul>
+<h2 id="-">接口规范</h2>
+<h3 id="-4-http-">接口支持4种HTTP方法</h3>
+<ul>
+<li><strong>GET</strong> 获取对象</li>
+<li><strong>PUT</strong> 替换和更新对象</li>
+<li><strong>POST</strong> 创建新的对象</li>
+<li><strong>DELETE</strong> 删除对象</li>
+</ul>
+<h3 id="http-">HTTP返回码</h3>
+<ul>
+<li>200 成功</li>
+<li>其他 失败</li>
+</ul>
+<h3 id="http-">HTTP 接口返回值结构</h3>
+<pre><code>{
+    &quot;meta&quot;: 
+    {
+        &quot;code&quot;: &quot;业务码&quot;,
+        &quot;message&quot;: &quot;状态信息&quot;
+    },
+    &quot;data&quot;: ...
+}
+</code></pre><p><em>若无特殊说明以下接口响应结果指的是此结构的data字段的值。</em></p>
+<h3 id="-">第三方服务端授权</h3>
+<ul>
+<li>请求地址: 所有可供第三方服务端访问的接口</li>
+<li>请求头部: Authorization: Basic $base64(appid:$hex_md5(appsecret))</li>
+</ul>
+<h3 id="-">客户端授权</h3>
+<p>-请求头部: Authorization: Bearer $accesstoken</p>
+<h3 id="-access-token">第三方应用获取永久有效的access token</h3>
+<ul>
+<li>请求地址：<strong> POST /auth/grant</strong></li>
+<li>是否认证：服务端授权</li>
+<li><p>请求内容:</p>
+<pre><code>  {
+      &quot;uid&quot;:&quot;用户id（整型）&quot;
+      &quot;user_name&quot;:&quot;用户名&quot;
+  }
+</code></pre></li>
+<li><p>成功响应：200</p>
+<pre><code>  {
+      &quot;token&quot;:&quot;访问token&quot;
+  }
+</code></pre></li>
+<li><p>操作失败：
+400 非法参数</p>
+</li>
+</ul>
+<h3 id="-id-token">绑定用户id和推送token</h3>
+<ul>
+<li>请求地址：<strong>POST /device/bind </strong></li>
+<li>是否认证：客户端授权</li>
+<li>接口说明: 只支持IOS端</li>
+<li><p>请求内容：</p>
+<pre><code>  {
+      &quot;apns_device_token&quot;: &quot;IOS设备token，16进制字符串&quot;,
+  }
+</code></pre></li>
+<li><p>成功响应 200</p>
+</li>
+<li><p>操作失败:
+状态码:400</p>
+</li>
+</ul>
+<h3 id="-id-token-">解除用户id和推送token之间的绑定</h3>
+<ul>
+<li>请求地址：<strong>POST /device/unbind </strong></li>
+<li>是否认证：客户端授权</li>
+<li><p>请求内容：</p>
+<pre><code>  {
+      &quot;apns_device_token&quot;: &quot;IOS设备token，16进制字符串&quot;,
+  }
+</code></pre></li>
+<li><p>成功响应 200</p>
+</li>
+<li><p>操作失败:
+状态码:400</p>
+</li>
+</ul>
+
+        </div>
+    </div>
+</div>
+</div>
+<a href="#" class="btn-top" id="btn_top"><span class="vertical">回顶部</span></a>
+<script>
+    $(function () {
+        $('pre').addClass('prettyprint');
+        $('td pre').removeClass('prettyprint');
+        prettyPrint();
+        $('.response-btn').on('click', function (e) {
+            var sectionNode = $(this).closest('.api-section');
+            sectionNode.find('.api-response').slideToggle();
+        });
+        var navHtml = '';
+        var text = $('.nav-title-active').text();
+        if (text.indexOf('Android SDK') != -1 || text.indexOf('iOS SDK') != -1 || text.indexOf('服务端接入') != -1 || text.indexOf('服务端推送接口') != -1) {
+//            console.log(text);
+            //抽取标题索引
+            $('h1,h2,h3,h4,h5,h6').each(function (i) {
+                $(this).attr('id', 'anchor-' + i);
+            })
+        } else {
+//            navHtml += '<header><h1>' + text + '</h1></header>';
+        }
+        if ($('.api-section').length > 0) {
+            navHtml += '<div class="index-nav index-endpoints">';
+            navHtml += '    <ul>';
+            $('.api-section').each(function (item) {
+                var id = $(this).attr('id');
+                var method = $(this).find('.api-method').eq(0).text().toUpperCase();
+                var api = $(this).find('.api-rule').eq(0)[0].innerHTML;
+                var desc = $(this).find('.api-description').eq(0).find('p').eq(0).text();
+                navHtml += '        <li>';
+                navHtml += '            <a href="#' + id + '">';
+                navHtml += '                <span class="type">' + method + '</span>';
+                navHtml += '                <b>' + api + '</b>';
+                navHtml += '                <span class="description">' + desc + '</span>';
+                navHtml += '                <i></i>';
+                navHtml += '            </a>';
+                navHtml += '        </li>';
+            });
+            navHtml += '    </ul>';
+            navHtml += '</div>';
+        }
+        $('.nav-page-content').prepend(navHtml);
+        var sidebar = $('.sidebar');
+        $(window).on('scroll', function () {
+            var scrollTop = $(this).scrollTop();
+//            console.log(scrollTop);
+//            if (scrollTop > 62) {
+//                sidebar.css({'position': 'fixed', 'top': '0'});
+//            }else {
+//                sidebar.css({'position': 'absolute', 'top': 62});
+//            }
+            if (scrollTop > $(this).height()) {
+                $('#btn_top').show();
+            } else {
+                $('#btn_top').hide();
+            }
+        });
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,1 @@
+define(function(){return {render:function(map) {var p=[],v =[];for(var i in map) {p.push(i);v.push(map[i]);}return (new Function(p, "var _s=[];_s.push(' <div class=\"widget-photo\">  <div class=\"main\">  <div class=\"content\" data-role=\"content\"></div>  </div> </div>'); return _s;")).apply(null, v).join("");}};});

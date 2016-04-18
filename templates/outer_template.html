@@ -1,0 +1,44 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>gobelieve即时通讯</title>
+    <link rel="stylesheet" href="{{ url_for('web.static', filename='themes/default/css/sdk.css', v='0.12') }}" />
+    <link href="{{ url_for('web.favicon') }}" type="image/x-icon" rel=icon>
+    <link href="{{ url_for('web.favicon') }}" type="image/x-icon" rel="shortcut icon">
+</head>
+<body>
+    <div class="header">
+      <div class="inner-wrapper">
+        {% block logo %}
+          <div class="logo"><a href="{{ url_for('web.index') }}">GoBelieve开发者中心</a></div>
+        {% endblock %}
+        <ul class="pull-right nav nav-right">
+          <li class="account item show-dropdown">
+          <a class="link dropdown-toggle" href="/user/info"
+            data-hover="dropdown" data-delay="50" data-close-others="false">
+            <span>{{ session.user.email }}</span>
+            <b class="caret"></b>
+          </a>
+          <ul class="dropdown-menu hide">
+            <li><a href="/user/info">帐号中心</a></li>
+            {% block custom_logout %}
+              <li><a href="/logout">注销</a></li>
+            {% endblock %}
+          </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+    {% block body %}{% endblock %}
+    <div class="footer">
+        <div class="inner-wrapper">
+            <p class="copyright">&copy; gobelieve.io. All Rights Reserved.</p>
+        </div>
+    </div>
+    {% include "mod/javascript_setup.html" %}
+    <script src="{{ url_for('web.static', filename='js/seajs/sea.js') }}"></script>
+    <script src="{{ url_for('web.static', filename='js/config.js') }}"></script>
+    {% block script %}{% endblock %}
+</body>
+</html>

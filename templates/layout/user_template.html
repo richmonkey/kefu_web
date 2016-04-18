@@ -1,0 +1,23 @@
+{% extends "layout/im.html" %}
+
+{% block body %}
+    <div class="container user-container">
+        <div class="inner-wrapper">
+            <div class="sidebar">
+                <div class="sidebar-inner">
+                    <div class="panel selected">
+                        <ul>
+                            <li {% if g.uri_path == '/user/info' or g.uri_path == '/info/modify' %}class="actived"{%endif%}><a href="/user/info">基本资料</a></li>
+                            <li {% if g.uri_path == '/user/password' %}class="actived"{%endif%}><a href="/user/password">密码安全</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="content">
+                <div class="user-wrapper">
+                    {% block content %}{% endblock %}
+                </div>
+            </div>    
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,9 @@
+.bd{
+    width: 100%;
+    min-height: 500px;
+    .bd-ct{
+        position: relative;
+        width: $width;
+        margin: 0 auto;
+    }
+}

@@ -1,0 +1,29 @@
+%toggle {
+    @include clearfix;
+    border: 2px solid #d8d8d8;
+    a {
+        $height: 40px;
+        float: left;
+        color: #505050;
+        width: 100px;
+        height: $height;
+        font-size: 14px;
+        line-height: $height;
+        text-align: center;
+        vertical-align: middle;
+        border-right: 2px solid #d8d8d8;
+        background-color: #fff;
+        &:hover, &.active {
+            color: #505050;
+            background-color: #edecec;
+            text-decoration: none;
+        }
+        &.last {
+            border-right: none;
+        }
+    }
+}
+
+.toggle-bar {
+    @extend %toggle;
+}

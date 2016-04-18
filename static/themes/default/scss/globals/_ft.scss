@@ -1,0 +1,26 @@
+.ft{
+    border-top: 1px solid #ccc;
+    padding: 30px 0 20px;
+    .ft-ct{
+        width: $width;
+        margin: 0 auto;
+        .links{
+            line-height: 28px;
+            text-align: center;
+            vertical-align: middle;
+            a{
+                color: #666666;
+                font-size: 15px;
+                margin: 0 20px;
+            }
+            span{
+                font-size: 14px;
+            }
+        }
+        p{
+            color: #989898;
+            line-height: 28px;
+            text-align: center;
+        }
+    }
+}

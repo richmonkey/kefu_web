@@ -1,0 +1,34 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>GoBelieve-开发者-注册</title>
+    <link href="{{ url_for('web.favicon') }}" type="image/x-icon" rel=icon>
+    <link href="{{ url_for('web.favicon') }}" type="image/x-icon" rel="shortcut icon">
+    <link rel="stylesheet" href="{{ url_for('web.static', filename='themes/default/css/login.css', v='0.4') }}" />
+</head>
+<body>
+    <div class="header">
+        <div class="inner-wrapper">
+            <div class="opt rt">
+                <a href="/register">注册</a>
+                <span>|</span>
+                <a href="/login">登录</a>
+            </div>
+            <div class="common-logo"><a href="{{ url_for('web.index') }}">GoBelieve开发者中心</a></div>
+        </div>
+    </div>
+    <div class="inner-wrapper">
+        {% block body %}{% endblock %}
+    </div>
+    <div class="footer">
+        <div class="inner-wrapper">
+            <p class="copyright">Copyright   2014 GoBelieve Developer Severce. All Rights Reserved.</p>
+        </div>
+    </div>
+    {% include "mod/javascript_setup.html" %}
+    <script src="{{ url_for('web.static', filename='js/seajs/sea.js') }}"></script>
+    <script src="{{ url_for('web.static', filename='js/config.js') }}"></script>
+    {% block script %}{% endblock %}
+</body>
+</html>

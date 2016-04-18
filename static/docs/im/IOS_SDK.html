@@ -1,0 +1,319 @@
+<!doctype html>
+<!--[if lt IE 7]>
+<html class="no-js ie6 oldie"> <![endif]-->
+<!--[if IE 7]>
+<html class="no-js ie7 oldie"> <![endif]-->
+<!--[if IE 8]>
+<html class="no-js ie8 oldie"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js"> <!--<![endif]-->
+<head>
+    <meta charset="utf-8"/>
+    <title>文档中心</title>
+    <meta name="keywords" content="documentation,dox"/>
+    <meta name="description" content="项目开发相关文档"/>
+    <link rel="stylesheet" href="css/typo.css"/>
+    <link rel="stylesheet" href="css/im_doc.css"/>
+    <script src="js/prettify.js"></script>
+    <script src="js/jquery-1.8.2.min.js"></script>
+</head>
+<body>
+<div class="header">
+    <div class="inner-wrapper">
+        <div class="logo"><a href="/">GoBelieve文档中心</a></div>
+    </div>
+</div>
+
+<div class="outer-wrapper">
+
+<div class="sidebar">
+    <div class="wrapper">
+        <nav class="sidebar-nav">
+            <div class="sidebar-content">
+                <!--<h1 class="nav-title">推送文档</h1>-->
+                <ul>
+
+            <li  ><a href="./Android_SDK.html">Android开发文档</a><i class="disclosure"></i></li>
+
+            <li  class="active"  ><a href="./IOS_SDK.html">IOS开发文档</a><i class="disclosure"></i></li>
+
+            <li  ><a href="./JS_SDK.html">JS开发文档</a><i class="disclosure"></i></li>
+
+            <li  ><a href="./Server.html">服务器RestAPI文档</a><i class="disclosure"></i></li>
+
+</ul>
+
+            </div>
+        </nav>
+    </div>
+</div>
+<div class="main">
+    <div class="wrapper">
+        <div class="nav-page-content typo typo-selection" role="main">
+            <h1 id="ios-sdk-">iOS SDK 接入指南</h1>
+<h2 id="-">项目配置</h2>
+<ul>
+<li>在工程target的&quot;Build Settings&quot;中，找到&quot;Linking&quot;的&quot;Other Linker Flags&quot;，添加参数<code>-ObjC</code>。</li>
+<li>在Build Phases的Link Binary With Libraries中添加 libimsdk.a libimkit.a</li>
+<li>将imsdk和imkit的头文件加入到 User Header Search Paths中</li>
+<li>将imKitRes包含的资源文件加入到工程中</li>
+<li>将imkit的第三方依赖加入工程 FBShimmering HPGrowingTextView SDWebImage Titanium Toast</li>
+</ul>
+<h2 id="imsdk">IMSDK</h2>
+<ul>
+<li>imsdk只包含消息基础通讯功能</li>
+</ul>
+<h2 id="-">配置服务地址</h2>
+<pre><code>//app可以单独部署服务器，给予第三方应用更多的灵活性
+//在开发阶段也可以配置成测试环境的地址 &quot;sandbox.imnode.gobelieve.io&quot;, &quot;sandbox.api.gobelieve.io&quot;
+[IMHttpAPI instance].apiURL = @&quot;api.gobelieve.io&quot;
+[IMService instance].host = @&quot;imnode.gobelieve.io&quot;
+</code></pre><h2 id="-im">初始化IM</h2>
+<p>启动im服务只需要设置用户的access token，调用启动接口并添加消息的监听对象。</p>
+<pre><code>[IMService instance].deviceID = [[[UIDevice currentDevice] identifierForVendor] UUIDString];
+
+//监听网络状态变化
+[[IMService instance] startRechabilityNotifier];
+</code></pre><h2 id="-im-accesstoken-im">用户登录成功后启动IM，设置用户的accesstoken并启动im</h2>
+<pre><code>[IMHttpAPI instance].accessToken = accessToken;
+[IMService instance].accessToken = accessToken;
+[[IMService instance] start];
+</code></pre><h2 id="-devicetoken-im">用户注销后清空用户的devicetoken并停止IM</h2>
+<pre><code>[IMHttpAPI unbindDeviceToken];
+[IMService instance].accessToken = @&quot;&quot;
+[[IMService instance] stop];
+</code></pre><h2 id="-im-">应用切到后台暂停IM,此后所有的消息将通过推送通道下发</h2>
+<pre><code>[[IMService instance] enterBackground];
+</code></pre><h2 id="-im">应用切到前台恢复IM</h2>
+<pre><code>[[IMService instance] enterForeground];
+</code></pre><h2 id="-">发送消息</h2>
+<ul>
+<li><p>启动IM服务设置好用户id之后便可以开始发送消息,消息发送的代码需要在UI线程中调用(消息内容大小限制为4k) :</p>
+<pre><code>  IMMessage *im = [[IMMessage alloc] init];
+  //设置发送方id
+  im.sender = sender;
+  //设置接收方id
+  im.receiver = receiver;
+  //消息本地id
+  im.msgLocalID = msgLocalID;
+  im.content = @&quot;消息内容&quot;;
+  [[IMService instance] sendPeerMessage:im];
+</code></pre></li>
+</ul>
+<h2 id="-imservice">类IMService</h2>
+<h3 id="-access-token">设置当前用户的access token</h3>
+<pre><code>属性名：String accessToken
+功能：在调用start之前必须要设置用户的accessToken，token是由第三方应用服务器调用IM服务器RestAPI所得。
+</code></pre><h3 id="-id">设置当前设备的id</h3>
+<pre><code>属性名：String deviceID
+功能：设备id可以用户多点登陆的唯一性判断,可选调用
+</code></pre><h3 id="-">监控网络变化</h3>
+<pre><code>方法名: -(void) startRechabilityNotifier
+功能: 可以及时的根据网络变化情况，断开，建立socket链接。
+</code></pre><h3 id="-">设置观察者</h3>
+<pre><code>方法名: -(void) addConnectionObserver:(id&lt;IMConnectionObserver&gt;)observer
+功能：设置observer，在observer中处理接受到的消息。
+参数说明： 
+    * observer 观察者
+返回值：无返回值
+</code></pre><h3 id="-">设置点对点消息的接受者</h3>
+<pre><code>方法名: -(void) addPeerMessageObserver:(id&lt;PeerMessageObserver&gt;)observer
+功能：设置observer，在observer中处理接受到的消息。
+参数说明： 
+    * observer 观察者
+返回值：无返回值
+</code></pre><h3 id="-">设置群组消息的接受者</h3>
+<pre><code>方法名: -(void) addGroupMessageObserver:(id&lt;GroupMessageObserver&gt;)observer
+功能：设置observer，在observer中处理接受到的消息。
+参数说明： 
+    * observer 观察者
+返回值：无返回值
+</code></pre><h3 id="-">开始接受消息</h3>
+<pre><code>方法名：-(void) start
+功能：用户登陆成功后，连接im服务器来接受在线消息。
+</code></pre><h3 id="-">停止接受消息</h3>
+<pre><code>方法名：-(void) stop
+功能：用户注销后，断开和im服务器的连接，从而终止接受在线消息。
+</code></pre><h3 id="-">应用进入到前台</h3>
+<pre><code>方法名：-(void) enterForeground
+功能：应用进入前台，im服务器将停止将消息推送到通知栏
+</code></pre><h3 id="-">应用进入到后台</h3>
+<pre><code>方法名：-(void) enterBackground
+功能：应用进入后台，im服务器会将将消息推送到通知栏
+</code></pre><h3 id="-">发送消息</h3>
+<pre><code>方法名: -(BOOL) sendPeerMessage:(IMMessage*)msg
+功能：发送im消息，如果当前连接处于断开状态，消息会发送失败, 函数返回YES，也不能表明服务器已经接收到消息。
+参数说明：
+    *msg 消息对象
+返回值:BOOL
+</code></pre><h3 id="-">发送群组消息</h3>
+<pre><code>方法名: -(BOOL) sendGroupMessage:(IMMessage*)msg
+功能：发送im消息，如果当前连接处于断开状态，消息会发送失败, 函数返回YES，也不能表明服务器已经接收到消息。
+参数说明：
+    *msg 消息对象
+返回值:BOOL
+</code></pre><h2 id="-imconnectionobserver">接口IMConnectionObserver</h2>
+<h3 id="-">连接状态</h3>
+<pre><code>方法名:-(void) onConnectState:(int)state
+功能:连接状态变更通知
+参数说明:
+    *state 连接的状态 STATE_UNCONNECTED, STATE_CONNECTING, STATE_CONNECTED, STATE_CONNECTFAIL
+返回值:无返回值
+</code></pre><h3 id="-">异地登陆</h3>
+<pre><code>方法名: -(void) onLoginPoint:(LoginPoint*)lp
+功能:当前登陆用户在异地登陆
+参数说明:
+    *lp 登录点信息
+返回值:无返回值
+</code></pre><h2 id="-peermessageobserver">接口PeerMessageObserver</h2>
+<h3 id="-">消息</h3>
+<pre><code>方法名:-(void) onPeerMessage:(IMMessage*)msg
+功能：接受到一条im消息
+参数说明：
+    *msg 消息对象
+返回值:无返回值
+</code></pre><h3 id="-ack">消息ACK</h3>
+<pre><code>方法名:-(void) onPeerMessageACK:(int)msgLocalID uid:(int64_t)uid
+功能:服务器对收到消息的ack,此时这条消息才能标志为发送成功
+参数说明:
+    *msgLocalID 消息的本地ID
+    *uid 消息接受者
+返回值:无返回值
+</code></pre><h3 id="-ack">消息接受者ACK</h3>
+<pre><code>方法名:-(void)onPeerMessageRemoteACK:(int)msgLocalID uid:(int64_t) uid
+功能:消息已经被对端接收到。
+参数说明:
+    *msgLocalID 消息的本地ID
+    *uid 消息接受者
+返回值:无返回值
+</code></pre><h3 id="-">消息发送失败</h3>
+<pre><code>方法名:-(void) onPeerMessageFailure:(int)msgLocalID uid:(int64_t)uid
+功能：消息发出后，未收到服务器的ack，在和服务器的连接断开后，会通知消息发送失败。
+参数说明:
+    *msgLocalID 消息的本地ID
+    *uid 消息接受者
+返回值:无返回值
+</code></pre><h2 id="-groupmessageobserver">接口GroupMessageObserver</h2>
+<h3 id="-">群组消息</h3>
+<pre><code>方法名:-(void) onGroupMessage:(IMMessage*)msg
+功能：接受到一条im消息
+参数说明：
+    *msg 消息对象
+返回值:无返回值
+</code></pre><h3 id="-ack">群组消息ACK</h3>
+<pre><code>方法名:-(void) onGroupMessageACK:(int)msgLocalID gid:(int64_t)gid
+功能:服务器对收到消息的ack,此时这条消息才能标志为发送成功
+参数说明:
+    *msgLocalID 消息的本地ID
+    *gid 群组ID
+返回值:无返回值
+</code></pre><h3 id="-">群组消息发送失败</h3>
+<pre><code>方法名:-(void) onGroupMessageFailure:(int)msgLocalID gid:(int64_t)gid
+功能：消息发出后，未收到服务器的ack，在和服务器的连接断开后，会通知消息发送失败。
+参数说明:
+    *msgLocalID 消息的本地ID
+    *gid 群组ID
+返回值:无返回值
+</code></pre><h3 id="-">群组通知</h3>
+<pre><code>方法名:-(void) onGroupNotification:(NSString*)notification
+功能：群组创建，解散和群组成员变更的通知消息
+参数说明:
+    *notification 通知内容
+
+返回值:无返回值
+</code></pre><h2 id="-imapi">类IMApi</h2>
+<h3 id="-device-token">设置当前用户的device token</h3>
+<pre><code>方法名:-(BOOL) bindDeviceToken:(NSString*)deviceToken success:(void (^)())success fail:(void (^)())fail
+功能:设置device token后，im服务器会对用户推送离线消息
+参数说明:
+    *deviceToken APNS的deviceToken
+返回值:boolean 是否设置成功。
+</code></pre><h3 id="-device-token">清空当前用户关联的device token</h3>
+<pre><code>方法名:-(BOOL) unbindDeviceToken:(NSString*)deviceToken success:(void (^)())success fail:(void (^)())fail
+功能:im服务器不会再对这台设备推送离线消息
+参数说明:
+    *deviceToken APNS的deviceToken
+    *accessToken 用户当前的accessToken
+返回值:boolean 是否清空成功。
+</code></pre><h2 id="imkit">IMKit</h2>
+<ul>
+<li>除了imsdk必要的初始化动作外，使用imkit需要初始化存储类</li>
+</ul>
+<pre><code>    //setDBPath必须要在引用PeerMessageHandler，GroupMessageHandler之前调用
+    //设置的路径名中可以包含用户id，这样就可以同时保存多个用户的聊天历史
+    //否则用户注销后，必须要清空目录
+    [MessageDB setDBPath:path];
+    [IMService instance].peerMessageHandler = [PeerMessageHandler instance];
+    [IMService instance].groupMessageHandler = [GroupMessageHandler instance];
+</code></pre><h2 id="-">打开聊天界面</h2>
+<pre><code>MessageViewController* msgController = [[MessageViewController alloc] init];
+msgController.peerUID = peerUID;
+msgController.peerName = peerName;
+msgController.currentUID = currentUID;
+[self.navigationController pushViewController:msgController animated: YES];
+</code></pre>
+        </div>
+    </div>
+</div>
+</div>
+<a href="#" class="btn-top" id="btn_top"><span class="vertical">回顶部</span></a>
+<script>
+    $(function () {
+        $('pre').addClass('prettyprint');
+        $('td pre').removeClass('prettyprint');
+        prettyPrint();
+        $('.response-btn').on('click', function (e) {
+            var sectionNode = $(this).closest('.api-section');
+            sectionNode.find('.api-response').slideToggle();
+        });
+        var navHtml = '';
+        var text = $('.nav-title-active').text();
+        if (text.indexOf('Android SDK') != -1 || text.indexOf('iOS SDK') != -1 || text.indexOf('服务端接入') != -1 || text.indexOf('服务端推送接口') != -1) {
+//            console.log(text);
+            //抽取标题索引
+            $('h1,h2,h3,h4,h5,h6').each(function (i) {
+                $(this).attr('id', 'anchor-' + i);
+            })
+        } else {
+//            navHtml += '<header><h1>' + text + '</h1></header>';
+        }
+        if ($('.api-section').length > 0) {
+            navHtml += '<div class="index-nav index-endpoints">';
+            navHtml += '    <ul>';
+            $('.api-section').each(function (item) {
+                var id = $(this).attr('id');
+                var method = $(this).find('.api-method').eq(0).text().toUpperCase();
+                var api = $(this).find('.api-rule').eq(0)[0].innerHTML;
+                var desc = $(this).find('.api-description').eq(0).find('p').eq(0).text();
+                navHtml += '        <li>';
+                navHtml += '            <a href="#' + id + '">';
+                navHtml += '                <span class="type">' + method + '</span>';
+                navHtml += '                <b>' + api + '</b>';
+                navHtml += '                <span class="description">' + desc + '</span>';
+                navHtml += '                <i></i>';
+                navHtml += '            </a>';
+                navHtml += '        </li>';
+            });
+            navHtml += '    </ul>';
+            navHtml += '</div>';
+        }
+        $('.nav-page-content').prepend(navHtml);
+        var sidebar = $('.sidebar');
+        $(window).on('scroll', function () {
+            var scrollTop = $(this).scrollTop();
+//            console.log(scrollTop);
+//            if (scrollTop > 62) {
+//                sidebar.css({'position': 'fixed', 'top': '0'});
+//            }else {
+//                sidebar.css({'position': 'absolute', 'top': 62});
+//            }
+            if (scrollTop > $(this).height()) {
+                $('#btn_top').show();
+            } else {
+                $('#btn_top').hide();
+            }
+        });
+    });
+</script>
+</body>
+</html>

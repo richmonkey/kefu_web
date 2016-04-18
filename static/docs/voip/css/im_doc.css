@@ -1,0 +1,91 @@
+/* line 1, im_doc.scss */
+body {
+  font-size: 16px;
+}
+
+/* line 5, im_doc.scss */
+.inner-wrapper {
+  width: 940px;
+  margin: 0 auto;
+}
+
+/* line 10, im_doc.scss */
+.header {
+  height: 64px;
+  background-color: #263240;
+}
+/* line 14, im_doc.scss */
+.header .logo a {
+  color: #fff;
+  font-size: 28px;
+  line-height: 64px;
+}
+/* line 18, im_doc.scss */
+.header .logo a:hover {
+  text-decoration: none;
+}
+
+/* line 25, im_doc.scss */
+.outer-wrapper {
+  width: 940px;
+  margin: 0 auto;
+}
+/* line 28, im_doc.scss */
+.outer-wrapper::after {
+  content: ' ';
+  clear: both;
+}
+/* line 32, im_doc.scss */
+.outer-wrapper .sidebar {
+  float: left;
+  width: 180px;
+  padding-top: 30px;
+}
+/* line 36, im_doc.scss */
+.outer-wrapper .sidebar .nav-title {
+  font-size: 18px;
+  line-height: 2;
+}
+/* line 40, im_doc.scss */
+.outer-wrapper .sidebar ul {
+  padding-top: 20px;
+}
+/* line 42, im_doc.scss */
+.outer-wrapper .sidebar ul li {
+  line-height: 48px;
+}
+/* line 45, im_doc.scss */
+.outer-wrapper .sidebar ul li.active a {
+  color: #333;
+}
+/* line 47, im_doc.scss */
+.outer-wrapper .sidebar ul li.active a:hover {
+  text-decoration: none;
+}
+/* line 55, im_doc.scss */
+.outer-wrapper .main {
+  float: left;
+  width: 726px;
+  padding-top: 30px;
+  border-left: 1px solid #eee;
+  padding-left: 30px;
+}
+
+/* line 64, im_doc.scss */
+.btn-top {
+  z-index: 10000;
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  display: none;
+  padding: 5px 10px;
+  background-color: #363b48;
+  color: #fff;
+  border-radius: 3px;
+  opacity: .3;
+}
+/* line 75, im_doc.scss */
+.btn-top:hover {
+  text-decoration: none;
+  opacity: .5;
+}

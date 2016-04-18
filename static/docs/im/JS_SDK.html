@@ -1,0 +1,228 @@
+<!doctype html>
+<!--[if lt IE 7]>
+<html class="no-js ie6 oldie"> <![endif]-->
+<!--[if IE 7]>
+<html class="no-js ie7 oldie"> <![endif]-->
+<!--[if IE 8]>
+<html class="no-js ie8 oldie"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js"> <!--<![endif]-->
+<head>
+    <meta charset="utf-8"/>
+    <title>文档中心</title>
+    <meta name="keywords" content="documentation,dox"/>
+    <meta name="description" content="项目开发相关文档"/>
+    <link rel="stylesheet" href="css/typo.css"/>
+    <link rel="stylesheet" href="css/im_doc.css"/>
+    <script src="js/prettify.js"></script>
+    <script src="js/jquery-1.8.2.min.js"></script>
+</head>
+<body>
+<div class="header">
+    <div class="inner-wrapper">
+        <div class="logo"><a href="/">GoBelieve文档中心</a></div>
+    </div>
+</div>
+
+<div class="outer-wrapper">
+
+<div class="sidebar">
+    <div class="wrapper">
+        <nav class="sidebar-nav">
+            <div class="sidebar-content">
+                <!--<h1 class="nav-title">推送文档</h1>-->
+                <ul>
+
+            <li  ><a href="./Android_SDK.html">Android开发文档</a><i class="disclosure"></i></li>
+
+            <li  ><a href="./IOS_SDK.html">IOS开发文档</a><i class="disclosure"></i></li>
+
+            <li  class="active"  ><a href="./JS_SDK.html">JS开发文档</a><i class="disclosure"></i></li>
+
+            <li  ><a href="./Server.html">服务器RestAPI文档</a><i class="disclosure"></i></li>
+
+</ul>
+
+            </div>
+        </nav>
+    </div>
+</div>
+<div class="main">
+    <div class="wrapper">
+        <div class="nav-page-content typo typo-selection" role="main">
+            <h1 id="im-js-sdk">IM JS SDK</h1>
+<h2 id="demo-">demo地址</h2>
+<ul>
+<li><a href="http://demo.gobelieve.io">http://demo.gobelieve.io</a></li>
+</ul>
+<h2 id="-imservice">类IMService</h2>
+<h3 id="-">构造函数</h3>
+<pre><code>参数说明:
+  * `observer` 回调对象(可选)
+</code></pre><h3 id="-access-token">设置当前用户的access token</h3>
+<pre><code>属性名：String accessToken
+功能：在调用start之前必须要设置用户的accessToken，token是由第三方应用服务器调用IM服务器RestAPI所得。
+</code></pre><h3 id="-">开始接受消息</h3>
+<pre><code>方法名：start
+功能：用户登陆成功后，连接im服务器来接受在线消息。
+返回值:无返回值
+</code></pre><h3 id="-">停止接受消息</h3>
+<pre><code>方法名：stop
+功能：用户注销后，断开和im服务器的连接，从而终止接受在线消息。
+返回值:无返回值
+</code></pre><h3 id="-">发送消息</h3>
+<pre><code>方法名: sendPeerMessage
+功能：发送im消息，如果当前连接处于断开状态，消息会发送失败, 函数返回YES，也不能表明服务器已经接收到消息。
+参数说明：
+    *msg 消息对象
+
+返回值:bool返回值
+</code></pre><h2 id="imservice-observer">IMService Observer</h2>
+<h3 id="onconnectstate">onConnectState</h3>
+<pre><code>功能:连接状态变更通知
+参数说明:
+  * state 连接状态
+</code></pre><h3 id="-">消息</h3>
+<pre><code>方法名: handlePeerMessage
+功能：接受到一条im消息
+参数说明：
+    *msg 消息对象
+返回值:无返回值
+</code></pre><h2 id="-ack">消息ACK</h2>
+<pre><code>方法名: handleMessageACK
+功能:服务器对收到消息的ack,此时这条消息才能标志为发送成功
+参数说明:
+    *msgLocalID(`Number`) 消息的本地ID
+    *uid(`Number`) 消息接受者
+返回值:无返回值
+</code></pre><h3 id="-ack">消息接受者ACK</h3>
+<pre><code>方法名: handleMessageRemoteACK
+功能:消息已经被对端接收到。
+参数说明:
+    *msgLocalID(`Number`) 消息的本地ID
+    *uid(`Number`) 消息接受者
+返回值:无返回值
+</code></pre><h3 id="-">消息发送失败</h3>
+<pre><code>方法名: handleMessageFailure
+功能：消息发出后，未收到服务器的ack，在和服务器的连接断开后，会通知消息发送失败。
+参数说明:
+    *msgLocalID(`Number`) 消息的本地ID
+    *uid(`Number`) 消息接受者
+返回值:无返回值
+</code></pre><h2 id="example">example</h2>
+<pre><code>&lt;script src=&quot;/engine.io.js&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;/json2.js&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;/im.js&quot;&gt;&lt;/script&gt;
+&lt;script&gt;
+  var observer = {
+      handlePeerMessage: function (msg) {
+          console.log(&quot;msg sender:&quot;, msg.sender, &quot; receiver:&quot;, msg.receiver, &quot; content:&quot;, msg.content, &quot; timestamp:&quot;, msg.timestamp)
+      },
+      handleMessageACK: function(msgLocalID, receiver) {
+          console.log(&quot;message ack local id:&quot;, msgLocalID, &quot; receiver:&quot;, receiver)
+      },
+      handleMessageFailure: function(msgLocalID, receiver) {
+          console.log(&quot;message fail local id:&quot;, msgLocalID, &quot; receiver:&quot;, receiver)
+      },
+      onConnectState: function(state) {
+          if (state == IMService.STATE_CONNECTED) {
+             console.log(&quot;im connected&quot;);
+          } else if (state == IMService.STATE_CONNECTING) {
+             console.log(&quot;im connecting&quot;);
+          } else if (state == IMService.STATE_CONNECTFAIL) {
+             console.log(&quot;im connect fail&quot;);
+          } else if (state == IMService.STATE_UNCONNECTED) {
+             console.log(&quot;im unconnected&quot;);
+          }
+      },
+      onReset: function() {
+          console.log(&quot;reset&quot;);
+      }
+  }
+
+  var im = new IMService(observer);
+  im.accessToken = &quot;????&quot;;
+  im.start()
+
+  var msg = {sender:100, receiver:200, content:&quot;11&quot;, msgLocalID:1000}
+
+  //connectState == STATE_CONNECTING
+  var r = im.sendPeerMessage(msg);
+  //r == false
+  console.log(&quot;send message result:&quot;, r);
+
+  function send() {
+      var msg = {sender:100, receiver:100, content:&quot;11&quot;, msgLocalID:1000}
+      if (im.connectState == IMService.STATE_CONNECTED) {
+          im.sendPeerMessage(msg);
+      }
+  }
+
+  setTimeout(send, 2000)
+&lt;/script&gt;
+</code></pre>
+        </div>
+    </div>
+</div>
+</div>
+<a href="#" class="btn-top" id="btn_top"><span class="vertical">回顶部</span></a>
+<script>
+    $(function () {
+        $('pre').addClass('prettyprint');
+        $('td pre').removeClass('prettyprint');
+        prettyPrint();
+        $('.response-btn').on('click', function (e) {
+            var sectionNode = $(this).closest('.api-section');
+            sectionNode.find('.api-response').slideToggle();
+        });
+        var navHtml = '';
+        var text = $('.nav-title-active').text();
+        if (text.indexOf('Android SDK') != -1 || text.indexOf('iOS SDK') != -1 || text.indexOf('服务端接入') != -1 || text.indexOf('服务端推送接口') != -1) {
+//            console.log(text);
+            //抽取标题索引
+            $('h1,h2,h3,h4,h5,h6').each(function (i) {
+                $(this).attr('id', 'anchor-' + i);
+            })
+        } else {
+//            navHtml += '<header><h1>' + text + '</h1></header>';
+        }
+        if ($('.api-section').length > 0) {
+            navHtml += '<div class="index-nav index-endpoints">';
+            navHtml += '    <ul>';
+            $('.api-section').each(function (item) {
+                var id = $(this).attr('id');
+                var method = $(this).find('.api-method').eq(0).text().toUpperCase();
+                var api = $(this).find('.api-rule').eq(0)[0].innerHTML;
+                var desc = $(this).find('.api-description').eq(0).find('p').eq(0).text();
+                navHtml += '        <li>';
+                navHtml += '            <a href="#' + id + '">';
+                navHtml += '                <span class="type">' + method + '</span>';
+                navHtml += '                <b>' + api + '</b>';
+                navHtml += '                <span class="description">' + desc + '</span>';
+                navHtml += '                <i></i>';
+                navHtml += '            </a>';
+                navHtml += '        </li>';
+            });
+            navHtml += '    </ul>';
+            navHtml += '</div>';
+        }
+        $('.nav-page-content').prepend(navHtml);
+        var sidebar = $('.sidebar');
+        $(window).on('scroll', function () {
+            var scrollTop = $(this).scrollTop();
+//            console.log(scrollTop);
+//            if (scrollTop > 62) {
+//                sidebar.css({'position': 'fixed', 'top': '0'});
+//            }else {
+//                sidebar.css({'position': 'absolute', 'top': 62});
+//            }
+            if (scrollTop > $(this).height()) {
+                $('#btn_top').show();
+            } else {
+                $('#btn_top').hide();
+            }
+        });
+    });
+</script>
+</body>
+</html>

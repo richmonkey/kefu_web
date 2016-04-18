@@ -1,0 +1,50 @@
+@import "year";
+@import "month";
+@import "date";
+@import "time";
+
+.widget-calendar {
+  position: absolute;
+  font: 16px/20px 'Xin Gothic', 'PT Sans', 'Hiragino Sans GB', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  background: #f9f9f9;
+  border-collapse: collapse;
+  border-spacing: 0;
+  border: 1px solid #dadada;
+  box-shadow: 1px 1px 9px #ccc;
+  text-align: center;
+  width: 238px;
+  z-index: 10;
+  .widget-calendar-date, .widget-calendar-month, .widget-calendar-year {
+    border: none;
+    box-shadow: none;
+  }
+  .widget-calendar-pannel {
+    width: 238px;
+    border-bottom: 1px solid #dadada;
+    zoom: 1;
+    &:after, &:before {
+      display: table;
+      line-height: 0;
+      content: "";
+    }
+    &:after {
+      clear: both;
+    }
+    .month, .year {
+      width: 25%;
+    }
+  }
+  .widget-calendar-control {
+    display: inline;
+    display: inline-block;
+    float: left;
+    width: 12.5%;
+    *width: 29px;
+    padding: 2px 0;
+    cursor: pointer;
+    &:hover {
+      background-color: #efefee;
+    }
+  }
+}
+

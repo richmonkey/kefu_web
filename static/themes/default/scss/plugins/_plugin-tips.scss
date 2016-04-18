@@ -1,0 +1,24 @@
+.tips-pop{
+    display: none;
+    z-index: 9999;
+    top: 100px;
+    padding: 10px 20px;
+    color: #fff;
+    background: #89cc56;
+    font-size: 14px;
+    line-height: 24px;
+    text-align: center;
+    span{
+        margin-right: 10px;
+    }
+    a{
+        color: #fff;
+        font-size: 24px;
+    }
+}
+.tips-failure{
+    background: #f60;
+    a{
+        color: #fff;
+    }
+}

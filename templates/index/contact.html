@@ -1,0 +1,24 @@
+{% extends "index/base.html" %}
+
+{% block body %}
+    <div class="container contact">
+        <div class="head-tip">
+            <div class="row">
+                <div class="col-md-5  hidden-sm hidden-xs"><span class="line"></span></div>
+                <div class="col-md-2  col-sm-2 ">联系我们</div>
+                <div class="col-md-5  hidden-sm hidden-xs"><span class="line"></span></div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="body">
+                <div class="map">
+                    <img src="{{  url_for('web.static', filename='themes/bootstrap/images/map.png',_external=true)}}" alt=""/>
+                </div>
+                <div class="contact-list">
+                    <p> <label>联系邮箱：</label> <a href="mailto:support@gobelieve.io">support@gobelieve.io</a></p>
+                    <p><label>联系QQ：</label> <a href="tencent://message/?uin=501132384&amp;Site=狗不理&amp;Menu=yes">501132384</a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

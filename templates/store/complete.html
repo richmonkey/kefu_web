@@ -1,0 +1,59 @@
+{% extends "layout/im.html" %}
+
+{% block breadcrumb %}
+  <div class="breadcrumb">
+    <div class="inner-wrapper">
+      <ol>
+        <li>
+          <a href="/im">应用管理</a>
+        </li>
+        <li class="arrow"><span>&gt;</span></li>
+        <li class="active">
+          <span>创建完成</span>
+        </li>
+      </ol>
+    </div>
+  </div>
+{% endblock %}
+
+{% block content %}
+  <div class="game-form">
+    <div class="center-section">
+      <div class="form-1">
+        <div class="complete-wrapper complete-one">
+          <h2 class="create-complete"><i></i>应用创建成功</h2>
+          <div class="item">
+            <h3><i></i>{{data['game']['name'] }} 接入信息如下</h3>
+            <p class="info">App     ID: {{data['game']['id'] }}</p>
+            <p class="info">App    Key: {{data['game']['key'] }}</p>
+            <p class="info">App Secret: {{data['game']['secret'] }}</p>
+            </div>
+            <div class="item">
+              <h3><i></i>接入文档</h3>
+              <p class="tips">我们已经为您接入和使用GoBelieveSDK提供了帮助文档，如需要请到
+              <a href="{{ url_for('web.doc') }}" target="_blank">“文档中心”</a>查阅</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+{% endblock %}
+
+{% block body %}
+    {{ self.breadcrumb() }}
+    <div class="inner-wrapper">
+      <div class="container">
+        <div class="one-wrapper">
+          <div class="panel">
+            {{ self.content() }}
+          </div>
+        </div>
+      </div>
+    </div>
+{% endblock %}
+
+{% block script %}
+  <script>
+    seajs.use('dist/app/widget/common/index');
+  </script>
+{% endblock %}

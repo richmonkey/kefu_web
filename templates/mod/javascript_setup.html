@@ -1,0 +1,7 @@
+<script>
+    var flask = flask || {};
+    var flaskEnv = '{{ config.get("APP_MODE") }}';
+    flask.env = {
+        isDevelopment: function() { return flaskEnv === 'Development' }
+    }
+</script>

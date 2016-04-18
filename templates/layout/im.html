@@ -1,0 +1,10 @@
+{% extends "outer_template.html" %}
+
+{% block logo %}
+  <div class="im-logo"><a href="{{ url_for('web.index') }}">GoBelieve</a></div>
+{% endblock %}
+
+{% block custom_logout %}
+  <li><a href="{{ url_for('account.logout', redirect_url=url_for('store.store_index')) }}">注销</a></li>
+{% endblock %}
+

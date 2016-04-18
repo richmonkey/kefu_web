@@ -1,0 +1,27 @@
+<div class="widget-calendar-time-wrapper clearfix">
+    {{if(display.hour)}}
+    <div class="widget-calendar-time widget-calendar-hour mr">
+        <label>时：</label><input type="text" value="{{hour}}" data-input="hour"/>
+        <div class="opt clearfix">
+            <span data-action="nextHour"> + </span>
+            <span data-action="prevHour"> - </span>    
+        </div>
+    </div>
+    {{endif}}
+    {{if(display.minute)}}
+    <div class="widget-calendar-time widget-calendar-minute">
+        <label>分：</label><input type="text" value="{{minute}}" data-input="minute"/>
+        <div class="opt clearfix">
+            <span data-action="nextMinute"> + </span>
+            <span data-action="prevMinute"> - </span>
+        </div>
+    </div>
+    {{endif}}
+    {{if(display.second)}}
+    <div class="widget-calendar-time widget-calendar-second">
+        <input type="text" value="{{second}}" data-input="second"/>
+        <span data-action="nextSecond"> + </span>
+        <span data-action="prevSecond"> - </span>
+    </div>
+    {{endif}}
+</div>

@@ -1,0 +1,449 @@
+<!doctype html>
+<!--[if lt IE 7]>
+<html class="no-js ie6 oldie"> <![endif]-->
+<!--[if IE 7]>
+<html class="no-js ie7 oldie"> <![endif]-->
+<!--[if IE 8]>
+<html class="no-js ie8 oldie"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js"> <!--<![endif]-->
+<head>
+    <meta charset="utf-8"/>
+    <title>文档中心</title>
+    <meta name="keywords" content="documentation,dox"/>
+    <meta name="description" content="项目开发相关文档"/>
+    <link rel="stylesheet" href="css/typo.css"/>
+    <link rel="stylesheet" href="css/im_doc.css"/>
+    <script src="js/prettify.js"></script>
+    <script src="js/jquery-1.8.2.min.js"></script>
+</head>
+<body>
+<div class="header">
+    <div class="inner-wrapper">
+        <div class="logo"><a href="/">GoBelieve文档中心</a></div>
+    </div>
+</div>
+
+<div class="outer-wrapper">
+
+<div class="sidebar">
+    <div class="wrapper">
+        <nav class="sidebar-nav">
+            <div class="sidebar-content">
+                <!--<h1 class="nav-title">推送文档</h1>-->
+                <ul>
+
+            <li  class="active"  ><a href="./Android_SDK.html">Android开发文档</a><i class="disclosure"></i></li>
+
+            <li  ><a href="./IOS_SDK.html">IOS开发文档</a><i class="disclosure"></i></li>
+
+            <li  ><a href="./JS_SDK.html">JS开发文档</a><i class="disclosure"></i></li>
+
+            <li  ><a href="./Server.html">服务器RestAPI文档</a><i class="disclosure"></i></li>
+
+</ul>
+
+            </div>
+        </nav>
+    </div>
+</div>
+<div class="main">
+    <div class="wrapper">
+        <div class="nav-page-content typo typo-selection" role="main">
+            <h1 id="android-sdk-">Android SDK 接入指南</h1>
+<h2 id="android-sdk-">Android SDK版本</h2>
+<ul>
+<li>目前SDK支持Android 2.2或以上版本的手机系统。</li>
+</ul>
+<h2 id="-imsdk-imkit-android-studio-">将imsdk，imkit加入到android studio工程</h2>
+<ul>
+<li>将imsdk.jar pushsdk.jar asynctcp.jar加入工程</li>
+<li>打开菜单 File-&gt;New Module-&gt;Import .JAR or .AAR Package,导入imkit.aar</li>
+<li>将 libasync_tcp.so 放到工程的libs目录下</li>
+<li><p>在app的gradle文件中添加imkit模块的依赖</p>
+<pre><code>  compile &#39;com.android.support:support-v4:21.+&#39;
+  compile &#39;com.android.support:appcompat-v7:21.+&#39;
+  compile &#39;com.google.code.gson:gson:2.3.1&#39;
+  compile &#39;com.squareup.picasso:picasso:2.4.0&#39;
+  compile &#39;com.squareup.retrofit:retrofit:1.7.1&#39;
+  compile &#39;com.netflix.rxjava:rxjava-core:0.17.6&#39;
+  compile &#39;com.netflix.rxjava:rxjava-android:0.17.6&#39;
+  compile &#39;com.squareup.okhttp:okhttp:2.1.0&#39;
+  compile &#39;com.squareup.okhttp:okhttp-urlconnection:2.1.0&#39;
+  compile &#39;org.apache.commons:commons-io:1.3.2&#39;
+  compile &#39;joda-time:joda-time:2.5&#39;
+</code></pre></li>
+</ul>
+<h2 id="-imsdk-imkit-eclipse-">将imsdk，imkit加入到eclipse工程</h2>
+<ol>
+<li><p>创建imkit的library</p>
+<ul>
+<li>导入imkit目录</li>
+<li>将imkit工程设置成libary</li>
+<li>将appcompat-v7作为library加入到imkit工程，
+因为imkit使用了appcompat-v7的资源，所以不能仅仅只引入appcompat-v7的jar</li>
+<li>将imsdk.jar, asynctcp.jar放到imkit的libs目录下</li>
+<li>选中imkit/libs（或lib）目录下的每一个jar包，右键菜单中选择Build Path， 选择Add to Build Path将SDK添加到工程的引用目录中。</li>
+<li>选中imkit/libs目录下的jar, 右键菜单中选择Build Path， 选择Configure Build Path导出jar给app工程使用</li>
+</ul>
+</li>
+<li><p>选中app工程，右键菜单中选择Properties，选中android页面，将imkit工程添加到App工程中</p>
+</li>
+<li>将pushsdk.jar复制到app的libs目录中，并将jar添加到app工程的引用目录中</li>
+<li>将libasync_tcp.so 放到工程的libs目录下</li>
+</ol>
+<h2 id="androidmanifest-xml-">AndroidManifest.xml配置</h2>
+<ul>
+<li><p>manifest 标签下添加：</p>
+<pre><code>  &lt;!-- 必需： 权限配置 --&gt;
+  &lt;uses-permission android:name=&quot;android.permission.INTERNET&quot; /&gt;
+  &lt;uses-permission android:name=&quot;android.permission.RECORD_AUDIO&quot;/&gt;
+</code></pre></li>
+</ul>
+<ul>
+<li><p>application 标签下添加：</p>
+<pre><code> &lt;!-- 必需： 应用ID(此处的id为您申请的应用id) --&gt;
+ &lt;meta-data
+     android:name=&quot;GOBELIEVE_APPID&quot;
+     android:value=&quot;7&quot; /&gt;
+
+ &lt;!-- 必需： 应用KEY (此处appkey为您申请的应用密钥)--&gt;
+ &lt;meta-data
+     android:name=&quot;GOBELIEVE_APPKEY&quot;
+     android:value=&quot;HS5NVruwDJxFwUPEdzqo7gBrQCSFsIhA&quot; /&gt;
+</code></pre></li>
+</ul>
+<h2 id="imsdk">IMSDK</h2>
+<ul>
+<li>imsdk只包含消息基础通讯功能</li>
+</ul>
+<h2 id="-">配置服务地址</h2>
+<ul>
+<li><p>配置服务器地址是可选步骤,而且必须在Application对象的onCreate里面配置，否则配置无效</p>
+<pre><code>  //app可以单独部署服务器，给予第三方应用更多的灵活性
+  //在开发阶段也可以配置成测试环境的地址 &quot;sandbox.imnode.gobelieve.io&quot;, &quot;sandbox.api.gobelieve.io&quot;,
+  //&quot;sandbox.pushnode.gobelieve.io&quot;
+
+  IMService.getInstance().setHost(&quot;imnode.gobelieve.io&quot;);
+  IMHttpAPI.setAPIURL(&quot;api.gobelieve.io&quot;);
+
+  //使用内置离线消息推送
+  SmartPushServiceProvider.setHost(&quot;pushnode.gobelieve.io&quot;)
+</code></pre></li>
+</ul>
+<h2 id="-im">初始化IM</h2>
+<ul>
+<li>在开始IM服务之前需要设置用户accessToken以及添加IMServiceObserver监听状态回调.</li>
+</ul>
+<pre><code>    mIMService = IMService.getInstance();
+    String androidID = Settings.Secure.getString(this.getContentResolver(),
+        Settings.Secure.ANDROID_ID);
+
+    //设置设备唯一标识,用于多点登录时设备校验
+    mIMService.setDeviceID(androidID);
+    //注册回调
+    mIMService.addObserver(new IMServiceObserver() {
+
+    });
+    //监听网络状态变化
+    mIMService.registerConnectivityChangeReceiver(getApplicationContext());
+</code></pre><h2 id="-im-accesstoken-im">用户登录成功后启动IM，设置用户的accesstoken并启动im</h2>
+<pre><code>     mIMService.setAccessToken(token);
+     mIMService.start();
+</code></pre><h2 id="-devicetoken-im">用户注销后清空用户的devicetoken并停止IM</h2>
+<pre><code>     IMApi.unbindDeviceToken(deviceToken, accessToken);
+     mIMService.setAccessToken(&quot;&quot;);
+     mIMService.stop();
+</code></pre><h2 id="-im-">应用切到后台暂停IM,此后所有的消息将通过推送通道下发</h2>
+<pre><code>     mIMService.enterBackground()
+</code></pre><h2 id="-im">应用切到前台恢复IM</h2>
+<pre><code>     mIMService.enterForeground()
+</code></pre><h2 id="-">发送消息</h2>
+<ul>
+<li><p>启动IM服务设置好用户id之后便可以开始发送消息,消息发送的代码需要在UI线程中调用(消息内容大小限制为4k) :</p>
+<pre><code>    //建立消息对象
+   IMMessage msg = new IMMessage();
+   //设置发送方id
+   msg.sender = senderId;
+   //设置接收方id
+   msg.receiver = receiverId;
+   //消息本地id
+   msg.msgLocalID = msgLocalId;
+   //设置消息内容
+   msg.content = &quot;早上好&quot;;
+   IMService.sendPeerMessage(msg);
+</code></pre></li>
+</ul>
+<h2 id="-imservice">类IMService</h2>
+<h3 id="-access-token">设置当前用户的access token</h3>
+<pre><code>方法名：public void setAccessToken(String token)
+功能：在调用start之前必须要设置用户的accessToken，token是由第三方应用服务器调用IM服务器RestAPI所得。
+参数说明： 
+    * token  客户端连接IM服务必须的acessToken
+返回值：无返回值
+</code></pre><h3 id="-id">设置当前设备的id</h3>
+<pre><code>方法名：public void setDeviceID(String deviceID)
+功能：设备id可以用户多点登陆的唯一性判断,可选调用
+参数说明：
+    *deviceID 设备id
+返回值：无返回值
+</code></pre><h3 id="-">监控网络变化</h3>
+<pre><code>方法名: public void registerConnectivityChangeReceiver(Context context)
+功能: 可以及时的根据网络变化情况，断开，建立socket链接。
+</code></pre><h3 id="-">设置观察者</h3>
+<pre><code>方法名: public void addObserver(IMServiceObserver observer)
+功能：设置observer，在observer中处理接受到的消息。
+参数说明： 
+    * observer 观察者
+返回值：无返回值
+</code></pre><h3 id="-">开始接受消息</h3>
+<pre><code>方法名：public void start()
+功能：用户登陆成功后，连接im服务器来接受在线消息。
+</code></pre><h3 id="-">停止接受消息</h3>
+<pre><code>方法名：public void stop()
+功能：用户注销后，断开和im服务器的连接，从而终止接受在线消息。
+</code></pre><h3 id="-">应用进入到前台</h3>
+<pre><code>方法名：public void enterForeground()
+功能：应用进入前台，im服务器将停止将消息推送到通知栏
+</code></pre><h3 id="-">应用进入到后台</h3>
+<pre><code>方法名：public void enterBackground()
+功能：应用进入后台，im服务器会将将消息推送到通知栏
+</code></pre><h3 id="-">发送消息</h3>
+<pre><code>方法名:public boolean sendPeerMessage(IMMessage msg)
+功能：发送im消息，如果当前连接处于断开状态，消息会发送失败, 函数返回true，也不能表明服务器已经接收到消息。
+参数说明：
+    *msg 消息对象
+返回值:boolean
+</code></pre><h3 id="-">发送群组消息</h3>
+<pre><code>方法名:public boolean sendGroupMessage(IMMessage msg)
+功能：发送im消息，如果当前连接处于断开状态，消息会发送失败, 函数返回true，也不能表明服务器已经接收到消息。
+参数说明：
+    *msg 消息对象
+返回值:boolean
+</code></pre><h2 id="-imserviceobserver">接口IMServiceObserver</h2>
+<h3 id="-">连接状态</h3>
+<pre><code>方法名:public void onConnectState(IMService.ConnectState state)
+功能:连接状态变更通知
+参数说明:
+    *state 连接的状态 STATE_UNCONNECTED, STATE_CONNECTING, STATE_CONNECTED, STATE_CONNECTFAIL
+返回值:无返回值
+</code></pre><h3 id="-">异地登陆</h3>
+<pre><code>方法名: public void onLoginPoint(LoginPoint lp)
+功能:当前登陆用户在异地登陆
+参数说明:
+    *lp 登录点信息
+返回值:无返回值
+</code></pre><h3 id="-">消息</h3>
+<pre><code>方法名:public void onPeerMessage(IMMessage msg)
+功能：接受到一条im消息
+参数说明：
+    *msg 消息对象
+返回值:无返回值
+</code></pre><h3 id="-ack">消息ACK</h3>
+<pre><code>方法名:public void onPeerMessageACK(int msgLocalID, long uid)
+功能:服务器对收到消息的ack,此时这条消息才能标志为发送成功
+参数说明:
+    *msgLocalID 消息的本地ID
+    *uid 消息接受者
+返回值:无返回值
+</code></pre><h3 id="-ack">消息接受者ACK</h3>
+<pre><code>方法名:public void onPeerMessageRemoteACK(int msgLocalID, long uid)
+功能:消息已经被对端接收到。
+参数说明:
+    *msgLocalID 消息的本地ID
+    *uid 消息接受者
+返回值:无返回值
+</code></pre><h3 id="-">消息发送失败</h3>
+<pre><code>方法名:public void onPeerMessageFailure(int msgLocalID, long uid)
+功能：消息发出后，未收到服务器的ack，在和服务器的连接断开后，会通知消息发送失败。
+参数说明:
+    *msgLocalID 消息的本地ID
+    *uid 消息接受者
+返回值:无返回值
+</code></pre><h2 id="-imapi">类IMApi</h2>
+<h3 id="-device-token">设置当前用户的device token</h3>
+<pre><code>方法名:public boolean bindDeviceToken(byte[] deviceToken, String accessToken)
+功能:设置device token后，im服务器会对用户推送离线消息，device token来自于push系统生成。
+参数说明:
+    *deviceToken 推送的deviceToken
+    *accessToken 用户当前的accessToken
+返回值:boolean 是否设置成功。
+</code></pre><h3 id="-device-token">清空当前用户关联的device token</h3>
+<pre><code>方法名:public boolean unbindDeviceToken(byte[] deviceToken, String accessToken)
+功能:im服务器不会再对这台设备推送离线消息
+参数说明:
+    *deviceToken 推送的deviceToken
+    *accessToken 用户当前的accessToken
+返回值:boolean 是否清空成功。
+</code></pre><h2 id="imkit">IMKit</h2>
+<ul>
+<li>imkit包含了完整的聊天界面和历史消息的存储</li>
+</ul>
+<h2 id="-imkit">初始化IMKit</h2>
+<ul>
+<li><p>除了imsdk必要的初始化动作外，使用imkit需要初始化存储类</p>
+<pre><code>  //设置的路径名中可以包含用户id，这样就可以同时保存多个用户的聊天历史
+  //否则用户注销后，必须要清空目录
+  FileCache fc = FileCache.getInstance();
+  fc.setDir(this.getDir(&quot;cache&quot;, MODE_PRIVATE));
+
+  PeerMessageDB db = PeerMessageDB.getInstance();
+  db.setDir(this.getDir(&quot;peer&quot;, MODE_PRIVATE));
+  GroupMessageDB db = GroupMessageDB.getInstance();
+  db.setDir(this.getDir(&quot;group&quot;, MODE_PRIVATE));
+
+  mIMService.setPeerMessageHandler(PeerMessageHandler.getInstance());
+  mIMService.setGroupMessageHandler(GroupMessageHandler.getInstance());
+</code></pre></li>
+</ul>
+<h2 id="-">打开聊天界面</h2>
+<pre><code>    Intent intent = new Intent(this, IMActivity.class);
+    intent.putExtra(&quot;peer_uid&quot;, peerUID);
+    intent.putExtra(&quot;peer_name&quot;, peerName);
+    intent.putExtra(&quot;current_uid&quot;, currentUID
+    startActivity(intent);
+</code></pre><h2 id="pushsdk">PushSDK</h2>
+<ul>
+<li>离线消息的推送可以使用im自带的pushsdk，也可以使用信鸽推送</li>
+</ul>
+<ul>
+<li><p>使用im自带的pushsdk AndroidManifest.xml中manifest 标签下添加</p>
+<pre><code>  &lt;uses-permission android:name=&quot;android.permission.BATTERY_STATS&quot; /&gt;
+  &lt;uses-permission android:name=&quot;android.permission.ACCESS_WIFI_STATE&quot; /&gt;
+  &lt;uses-permission android:name=&quot;android.permission.ACCESS_NETWORK_STATE&quot; /&gt;
+  &lt;uses-permission android:name=&quot;android.permission.CHANGE_NETWORK_STATE&quot; /&gt;
+  &lt;uses-permission android:name=&quot;android.permission.CHANGE_WIFI_STATE&quot; /&gt;
+  &lt;uses-permission android:name=&quot;android.permission.VIBRATE&quot; /&gt;
+  &lt;uses-permission android:name=&quot;android.permission.WRITE_EXTERNAL_STORAGE&quot; /&gt;
+  &lt;uses-permission android:name=&quot;android.permission.BROADCAST_STICKY&quot; /&gt;
+  &lt;uses-permission android:name=&quot;android.permission.READ_PHONE_STATE&quot; /&gt;
+  &lt;uses-permission android:name=&quot;android.permission.SYSTEM_ALERT_WINDOW&quot; /&gt;
+  &lt;uses-permission android:name=&quot;android.permission.RECEIVE_BOOT_COMPLETED&quot; /&gt;
+  &lt;uses-permission android:name=&quot;android.permission.WAKE_LOCK&quot; /&gt;
+  &lt;uses-permission android:name=&quot;android.permission.MODIFY_AUDIO_SETTINGS&quot;/&gt;
+</code></pre></li>
+<li><p>使用im自带的pushsdk AndroidManifest.xml中application 标签下添加：</p>
+<pre><code>  &lt;!-- 必需： 推送页面配置 --&gt;
+  &lt;activity android:name=&quot;com.gameservice.sdk.push.ui.SmartPushActivity&quot; /&gt;
+
+  &lt;!-- 必需： push 服务配置 --&gt;
+  &lt;service
+      android:name=&quot;com.beetle.push.PushService&quot;
+      android:process=&quot;:push&quot; /&gt;
+
+  &lt;!-- 必需： push 消息接收配置 --&gt;
+  &lt;receiver
+      android:name=&quot;com.beetle.push.PushReceiver&quot;
+      android:enabled=&quot;true&quot;
+      android:exported=&quot;false&quot;
+      android:priority=&quot;90000&quot;
+      android:process=&quot;:push&quot;&gt;
+      &lt;intent-filter&gt;
+          &lt;action android:name=&quot;android.intent.action.PACKAGE_ADDED&quot; /&gt;
+          &lt;action android:name=&quot;android.intent.action.PACKAGE_CHANGED&quot; /&gt;
+          &lt;action android:name=&quot;android.intent.action.PACKAGE_DATA_CLEARED&quot; /&gt;
+          &lt;action android:name=&quot;android.intent.action.PACKAGE_INSTALL&quot; /&gt;
+          &lt;action android:name=&quot;android.intent.action.PACKAGE_REMOVED&quot; /&gt;
+          &lt;action android:name=&quot;android.intent.action.PACKAGE_REPLACED&quot; /&gt;
+          &lt;action android:name=&quot;android.intent.action.PACKAGE_RESTARTED&quot; /&gt;
+          &lt;action android:name=&quot;android.intent.action.USER_PRESENT&quot; /&gt;
+          &lt;action android:name=&quot;android.net.conn.CONNECTIVITY_CHANGE&quot; /&gt;
+          &lt;action android:name=&quot;android.intent.action.BOOT_COMPLETED&quot; /&gt;
+      &lt;/intent-filter&gt;
+  &lt;/receiver&gt;
+</code></pre></li>
+<li><p>启动im自带的推送服务</p>
+<pre><code>  //设置推送服务的回调
+  Push.registerReceiver(new IMsgReceiver{
+
+  });
+  //启动后台推送服务
+  Push.registerService(getApplicationContext());
+</code></pre></li>
+</ul>
+<h2 id="-pushsdk">类PushSDK</h2>
+<h3 id="-">注册回调</h3>
+<pre><code>方法名：public void registerReceiver(IMsgReceiver receiver)
+功能：回调接口用于接受推送的devicetoken
+参数说明:
+    *receiver 回调对象
+返回值:无返回值
+</code></pre><h3 id="-">启动推送服务</h3>
+<pre><code>方法名：public void registerService(Context context)
+功能: 应用启动后，启动推送服务
+参数说明:
+    *context 应用的ApplicationContext
+返回值:无返回值
+</code></pre><h2 id="-imsgreceiver">接口IMsgReceiver</h2>
+<h3 id="-devicetoken">获得devicetoken</h3>
+<pre><code>方法名: public void onDeviceToken(byte[] deviceToken)
+功能:推送服务注册成功后，将deviceToken通知到应用
+参数说明:
+    *deviceToken 用于推送的设备唯一标识
+返回值:无返回值
+</code></pre>
+        </div>
+    </div>
+</div>
+</div>
+<a href="#" class="btn-top" id="btn_top"><span class="vertical">回顶部</span></a>
+<script>
+    $(function () {
+        $('pre').addClass('prettyprint');
+        $('td pre').removeClass('prettyprint');
+        prettyPrint();
+        $('.response-btn').on('click', function (e) {
+            var sectionNode = $(this).closest('.api-section');
+            sectionNode.find('.api-response').slideToggle();
+        });
+        var navHtml = '';
+        var text = $('.nav-title-active').text();
+        if (text.indexOf('Android SDK') != -1 || text.indexOf('iOS SDK') != -1 || text.indexOf('服务端接入') != -1 || text.indexOf('服务端推送接口') != -1) {
+//            console.log(text);
+            //抽取标题索引
+            $('h1,h2,h3,h4,h5,h6').each(function (i) {
+                $(this).attr('id', 'anchor-' + i);
+            })
+        } else {
+//            navHtml += '<header><h1>' + text + '</h1></header>';
+        }
+        if ($('.api-section').length > 0) {
+            navHtml += '<div class="index-nav index-endpoints">';
+            navHtml += '    <ul>';
+            $('.api-section').each(function (item) {
+                var id = $(this).attr('id');
+                var method = $(this).find('.api-method').eq(0).text().toUpperCase();
+                var api = $(this).find('.api-rule').eq(0)[0].innerHTML;
+                var desc = $(this).find('.api-description').eq(0).find('p').eq(0).text();
+                navHtml += '        <li>';
+                navHtml += '            <a href="#' + id + '">';
+                navHtml += '                <span class="type">' + method + '</span>';
+                navHtml += '                <b>' + api + '</b>';
+                navHtml += '                <span class="description">' + desc + '</span>';
+                navHtml += '                <i></i>';
+                navHtml += '            </a>';
+                navHtml += '        </li>';
+            });
+            navHtml += '    </ul>';
+            navHtml += '</div>';
+        }
+        $('.nav-page-content').prepend(navHtml);
+        var sidebar = $('.sidebar');
+        $(window).on('scroll', function () {
+            var scrollTop = $(this).scrollTop();
+//            console.log(scrollTop);
+//            if (scrollTop > 62) {
+//                sidebar.css({'position': 'fixed', 'top': '0'});
+//            }else {
+//                sidebar.css({'position': 'absolute', 'top': 62});
+//            }
+            if (scrollTop > $(this).height()) {
+                $('#btn_top').show();
+            } else {
+                $('#btn_top').hide();
+            }
+        });
+    });
+</script>
+</body>
+</html>

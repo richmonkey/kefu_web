@@ -1,0 +1,13 @@
+@import 'core/setting';
+@import 'core/reset';
+@import 'core/css3';
+@import 'core/mixin';
+
+body {
+    background: url('../images/index/bg.jpg') no-repeat center top;
+}
+.inner-wrapper {
+    width: 1180px;
+    margin: 0 auto;
+    position: relative;
+}

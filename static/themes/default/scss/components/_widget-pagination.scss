@@ -1,0 +1,34 @@
+.pagination {
+    a {
+        border: 2px solid #d8d8d8;
+        margin: 2px 5px;
+        padding: 8px 14px;
+        text-decoration: none;
+        background: #fff;
+        font-size: 14px;
+        color: #505050;
+        &:hover {
+            background: none repeat scroll 0 0 #70c8f8;
+            color: #fff;        
+            border: 2px solid #70c8f8;
+            text-decoration: none;
+        }
+    }
+    .active, .active:hover {
+        background: none repeat scroll 0 0 #70c8f8;
+        border: 2px solid #70c8f8;
+        color: #fff;
+        cursor: default;
+        font-weight: bold;    
+    }
+    .disabled {
+        color: #868686;
+        cursor: default;
+        outline: medium none;
+        background-color: #f7f7f7;
+        &:hover {
+            background: none repeat scroll 0 0 #f7f7f7;
+            color: #868686;
+        }
+    }
+}

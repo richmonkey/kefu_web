@@ -1,0 +1,20 @@
+$hdHeight: 80px;
+.hd{
+    border-bottom: 1px solid #ccc;
+    width: 100%;
+    height: $hdHeight;
+    .hd-ct{
+        position: relative;
+        width: $width;
+        margin: 0 auto;
+        h1{
+            font-size: 28px;
+            line-height: $hdHeight;
+        }
+        .hd-rt{
+            position: absolute;
+            bottom: 10px;
+            right: 0;
+        }
+    }
+}

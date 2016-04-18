@@ -1,0 +1,20 @@
+.browser-list {
+    padding-top: 20px;
+    li {
+        float: left;
+        margin-right: 5px;
+        a {
+            display: block;
+            width: 246px;
+            height: 80px;
+            background: url('../images/chrome_logo_2x.png') no-repeat;
+            text-indent: -9999px;
+            &:hover {
+                text-decoration: none;
+            }
+            &.firefox {
+                background: url('../images/header-firefox.png') no-repeat;
+            }
+        }
+    }
+}

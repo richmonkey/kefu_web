@@ -1,0 +1,76 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>GoBelieve-开发者-登录</title>
+    <link rel="stylesheet" href="{{ url_for('web.static', filename='themes/default/css/login.css', v='0.3') }}">
+    <link href="{{ url_for('web.favicon') }}" type="image/x-icon" rel=icon>
+    <link href="{{ url_for('web.favicon') }}" type="image/x-icon" rel="shortcut icon">
+</head>
+<body>
+    <div class="header">
+        <div class="inner-wrapper">
+            <div class="opt rt">
+                <a href="/register">注册</a>
+            </div>
+            <div class="common-logo"><a href="/">GoBelieve开发者中心</a></div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="inner-wrapper">
+            <div class="login-wrapper">
+                <div class="center-section">
+                    <div class="form-1 login-form">
+                        <form accept-charset="utf-8" method="post" action="">
+                            <fieldset><legend>登录</legend></fieldset>
+                            <table>
+                                <tbody>
+                                    <tr>
+                                        <th><label class="label-1" for="email">邮箱:</label></th>
+                                        <td>
+                                            <input type="text" class="ipt" size="30" maxlength="80" value="" name="email" id="email">
+                                            <p class="error">&nbsp;</p>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th><label class="label-1" for="password">密码:</label></th>
+                                        <td>
+                                            <input type="password" class="ipt" size="30" value="" name="password" id="password">
+                                            <p class="error">&nbsp;</p>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th></th>
+                                        <td>
+                                            <a href="#" data-action="login" class="btn btn-info">登录</a>
+                                            <div class="login-opt clearfix">
+                                                <a href="/register" class="success rt ml-5">注册GoBelieve用户</a>
+                                                <a class="rt blue" href="/forget">忘记密码?</a>
+                                                <div class="checkbox-group lf">
+                                                    <label class="gray" for="remember"><input type="checkbox" id="remember" value="1" name="remember">下次自动登录</label>    
+                                                </div>
+                                                
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </form>                    
+                    </div>
+                </div>
+            </div>    
+        </div>
+    </div>
+    <div class="footer">
+        <div class="inner-wrapper">
+            <p class="copyright">&copy; gobelieve.io. All Rights Reserved.</p>
+        </div>
+    </div>
+    {% include "mod/javascript_setup.html" %}
+    <script src="{{ url_for('web.static', filename='js/seajs/sea.js') }}"></script>
+    <script src="{{ url_for('web.static', filename='js/config.js') }}"></script>
+    <script>
+        seajs.use('dist/app/user/login/index')
+    </script>
+</body>
+</html>
