@@ -23,5 +23,4 @@ node_modules/
 *.pyc
 .logs
 test.py
-config.py
 _index/*

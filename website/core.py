@@ -4,7 +4,6 @@ from utils.response_meta import ResponseMeta
 from utils.type_definition import TypeDefinition
 from functools import wraps
 from itsdangerous import URLSafeTimedSerializer
-from config import SECRET_KEY, TOKEN_SALT
 
 
 class MainException(object):
@@ -293,6 +292,3 @@ class Permission(object):
     def __exit__(self, *args):
         return False
 
-
-def token_serializer(token_type):
-    return URLSafeTimedSerializer(SECRET_KEY, salt="{}.{}".format(TOKEN_SALT, token_type))

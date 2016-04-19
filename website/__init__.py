@@ -10,13 +10,17 @@ from utils.func import init_logger
 from utils.mysql import Mysql
 from config import APP_MODE
 from config import MYSQL
-from config import MYSQL_IM
 
 LOGGER = init_logger(__name__)
 
-from rds import rds
-from rds import rds0
-from rds import rds1
+import redis
+import config
+
+rds = redis.StrictRedis(host=config.REDIS_HOST, 
+                         port=config.REDIS_PORT, 
+                         db=config.REDIS_DB,
+                         password=config.REDIS_PASSWORD)
+
 
 def http_error_handler(err):
     LOGGER.error(err)
@@ -39,40 +43,20 @@ def before_request():
     g.auth = None
     g.perms = {}
 
-    g.rds = rds
-    g.im_rds = rds1
+    g.im_rds = rds
 
-    g._db = None
-    db = getattr(g, '_db', None)
-    if db is None:
-        cnf = MYSQL
-        g._db = Mysql(*cnf)
-
-    
-    db = getattr(g, '_imdb', None)
-    if db is None:
-        cnf = MYSQL_IM
-        g._imdb = Mysql(*cnf)
-
+    cnf = MYSQL
+    g._db = Mysql(*cnf)
+    g._imdb = g._db
 
 def app_teardown(exception):
-    # LOGGER.debug('app_teardown')
     try:
         db = getattr(g, '_db', None)
         if db:
             db.close()
-
     except Exception:
         pass
 
-
-    try:
-        db = getattr(g, '_imdb', None)
-        if db:
-            db.close()
-
-    except Exception:
-        pass
 
 
 # 初始化接口
@@ -85,10 +69,9 @@ def init_app(app):
     app.register_error_handler(Exception, generic_error_handler)
 
     from utils.mail import Mail
-    from utils.sentry import Sentry
 
     Mail.init_app(app)
-    Sentry.init_app(app)
+
     # 注册接口
     from api import api
     from web import web
