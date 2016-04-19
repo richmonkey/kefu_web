@@ -3,8 +3,8 @@
 
 ## 前端依赖
 
-1. `npm install` `bundle install`
-2. 具体见 Gruntfile.js
+1. `npm install` 安装依赖模块
+2. grunt生成发布版本的js, 具体见 Gruntfile.js
 
 ## 运行依赖
 
