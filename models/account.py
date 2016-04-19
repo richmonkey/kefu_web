@@ -3,7 +3,7 @@
 """
 import time
 import logging
-import website.core import EmailUsageType
+from website.core import EmailUsageType
 
 class Account():
     @classmethod
