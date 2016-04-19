@@ -1,81 +1,36 @@
 {% extends "index/base.html" %}
 
 {% block body %}
-    <div class="bg-wrap banner">
-        <div class="container">
+    <style>
+        .wrap {
+            text-align: center;
+            padding: 150px 0
+        }
+
+        .download-wrap img {
+            width: 240px;
+        }
+
+        .hide {
+            display: none;
+        }
+    </style>
+    <div class="container contact">
+        <div class="head-tip">
             <div class="row">
-                <div class="col-md-6 col-sm-12 desc">
-                    <h1>国内唯一<strong>开源IM</strong>服务</h1>
-
-                    <div class="btn-wrap">
-                        <a href="{{ url_for('web.store_index',_external=true) }}" class="btn-3">马上接入</a>
-                        <a href="{{ url_for('web.static', filename='docs/im/Server.html',_external=true) }}"
-                           class="btn-4">文档</a>
-                        <a href="https://github.com/GoBelieveIO" target="_blank" class="btn-4">源代码</a>
-
-                    </div>
-                </div>
-                <div class="col-md-6 col-sm-12 img">
-                    <div class="img-wrap">
-                        <img src="{{ url_for('web.static', filename='themes/bootstrap/images/p.png',_external=true) }}"
-                             alt=""/>
-                    </div>
-                </div>
+                <div class="col-md-5  hidden-sm hidden-xs"><span class="line"></span></div>
+                <div class="col-md-2  col-sm-2 ">狗不理客服</div>
+                <div class="col-md-5  hidden-sm hidden-xs"><span class="line"></span></div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="body">
+                <h1 style="text-align: center">
+                    让你的每一位顾客都满意
+                </h1>
             </div>
         </div>
     </div>
-    <div class="feature">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-3 col-sm-12">
-                    <div class="item-wrap">
-                        <div class="icon icon-1">
-                            <span>一小时接入</span>
-                        </div>
-                        <div class="desc">
-                            专注IM，无冗余功能
-                            几行代码，一小时接入
-                            省时省力。
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3 col-sm-12">
-                    <div class="item-wrap">
-                        <div class="icon icon-2">
-                            <span>自由定制</span>
-                        </div>
-                        <div class="desc">
-                            提供最新源码，
-                            自行二次开发，业务协议
-                            交互视觉均可根据业务需求
-                            自由定制。
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3 col-sm-12">
-                    <div class="item-wrap">
-                        <div class="icon icon-3">
-                            <span>完全开源</span>
-                        </div>
-                        <div class="desc">
-                            国内唯一开源IM服务，所有源码在Github开放，与线上版本一致
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3 col-sm-12">
-                    <div class="item-wrap">
-                        <div class="icon icon-4">
-                            <span>私有云部署</span>
-                        </div>
-                        <div class="desc">
-                            彻底排除窃取隐私可能，支持自有域名部署可搭建私有云，无需更新客户端，即可热切换到私有服务，来去自由。
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <script>
         (function ($) {
             var toggle = $('.toggle');

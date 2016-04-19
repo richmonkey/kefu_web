@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>狗不理客服下载</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        .wrap {
+            text-align: center;
+            padding: 150px 0
+        }
+
+        .download-wrap img {
+            width: 240px;
+        }
+
+        .hide {
+            display: none;
+        }
+
+
+    </style>
+</head>
+<body>
+<div class="wrap qrcode hide" id="qrcode">
+    <h1>下载狗不理客服</h1>
+    <p>扫描以下二维码下载</p>
+    <img src="./images/qrcode.png" alt="">
+</div>
+<div class="wrap download-wrap hide" id="ios">
+    <a href="itms-services://?action=download-manifest&url=https://api.gobelieve.io/kefu.plist">点击安装狗不理客服</a>
+</div>
+<div class="wrap download-wrap hide" id="android">
+    <a href="http://api.gobelieve.io/kefu.apk">点击安装狗不理客服</a>
+</div>
+<div class="wx-tip hide" id="wx-tip">
+    <h2>点击右上角『从浏览器中打开』!</h2>
+</div>
+<script>
+    if (/MicroMessenger/i.test(navigator.userAgent)) {
+        //微信
+        document.getElementById('wx-tip').style.display = 'block';
+    } else if (/ipad|iphone/i.test(navigator.userAgent.toLowerCase())) {
+        // android or ios 暂时支持iOS //(/android/i.test(navigator.userAgent.toLowerCase())) ||
+        document.getElementById('ios').style.display = 'block';
+    } else if (/android/i.test(navigator.userAgent.toLowerCase())) {
+        document.getElementById('android').style.display = 'block';
+    } else {
+        //PC
+        document.getElementById('qrcode').style.display = 'block';
+    }
+
+
+</script>
+</body>
+</html>
