@@ -271,6 +271,25 @@ def delete_store(store_id):
 
     return ""
 
+@api.route("/stores/<int:store_id>", methods=["PATCH"])
+@require_basic_auth
+def set_mode(store_id):
+    db = g._imdb
+    rds = g.im_rds
+    developer_id = g.developer_id
+    appid = KEFU_APPID
+    mode = int(request.form['mode']) if request.form.has_key('mode') else 0
+    if mode != 1 and mode != 2 and mode != 3:
+        return INVALID_PARAM()
+    r = Store.set_mode(db, store_id, mode)
+    if r:
+        publish_message(rds, "store_update", str(store_id))
+
+    logging.info("set store:%s mode:%s", store_id, mode)
+    return ""
+
+    
+
 @api.route("/stores", methods=["GET"])
 @require_basic_auth
 def get_stores():

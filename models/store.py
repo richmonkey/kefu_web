@@ -34,6 +34,12 @@ class Store(object):
         db.commit()
 
     @classmethod
+    def set_mode(cls, db, store_id, mode):
+        sql = "UPDATE store SET mode=%s WHERE id=%s"
+        r = db.execute(sql, (mode, store_id))
+        return r.rowcount
+
+    @classmethod
     def get_store(cls, db, store_id):
         sql = "SELECT id, name FROM store WHERE id=%s"
         r = db.execute(sql, store_id)

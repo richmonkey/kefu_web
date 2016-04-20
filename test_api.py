@@ -14,7 +14,7 @@ import sys
 import base64
 
 #URL = "http://192.168.33.10"
-URL = "http://192.168.33.10:15203/api"
+URL = "http://dev.kefu.gobelieve.io/api"
 
 email = "houxuehua49@gmail.com"
 password = "111111"
@@ -30,11 +30,21 @@ r = requests.post(url, data={"name":"test"}, headers = headers)
 print r.content
 obj = json.loads(r.content)
 store_id = obj['store_id']
-
+ 
 #获取store列表
 url = URL + "/stores"
 r = requests.get(url, headers=headers)
 print r.content
+
+FIX_MODE = 1
+ONLINE_MODE = 2
+BROADCAST_MODE = 3
+
+store_id=55
+#设置客服模式
+url = URL + "/stores/%s"%store_id
+r = requests.patch(url, data={"mode":BROADCAST_MODE}, headers=headers)
+print "set mode:", r.status_code
 
 #创建seller
 url = URL + "/stores/%s/sellers"%store_id
