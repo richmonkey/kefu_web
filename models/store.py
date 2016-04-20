@@ -3,6 +3,11 @@ import logging
 
 class Store(object):
     @classmethod
+    def set_store_name(cls, rds, store_id, name):
+        key = "stores_%d"%store_id
+        rds.hset(key, "name", name)
+
+    @classmethod
     def create_store(cls, db, name, group_id, developer_id):
         sql = "INSERT INTO store(name, group_id, developer_id) VALUES(%s, %s, %s)"
         r = db.execute(sql, (name, group_id, developer_id))

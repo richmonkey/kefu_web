@@ -250,6 +250,9 @@ def add_store():
     store_id = Store.create_store(db, name, gid, developer_id)
     db.commit()
 
+    #将名称存储redis,用于后台推送
+    Store.set_store_name(g.im_rds, store_id, name)
+
     content = "%d,%d,%d"%(gid, appid, 0)
     publish_message(g.im_rds, "group_create", content)
 
