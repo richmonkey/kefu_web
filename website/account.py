@@ -66,7 +66,7 @@ def register_valid():
             if confirm:
                 Account.set_email_checked(g._db, verify_email['ro_id'], 1)
                 session['user']['email_checked'] = 1
-                return redirect(url_for('.im_index'))
+                return redirect(url_for('store.store_index'))
             else:
                 error = '确认邮件失败'
 
@@ -76,7 +76,7 @@ def register_valid():
     if 'user' in session and session['user'].get('email'):
         mail = session['user'].get('email')
         if session['user'].get('email_checked') == 1:
-            return redirect(url_for('.im_index'))
+            return redirect(url_for('store.store_index'))
     else:
         return redirect(url_for('.login'))
 

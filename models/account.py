@@ -4,7 +4,7 @@
 import time
 import logging
 from website.core import EmailUsageType
-
+from website.core import ObjectType
 class Account():
     @classmethod
     def get_account(cls, db, account_id):

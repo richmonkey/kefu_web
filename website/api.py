@@ -69,7 +69,7 @@ def verify_mail():
     password = generate_password_hash(password)
  
     code = random_ascii_string(40)
-    send_verify_email(email, code, email_cb=url_for('web.register_valid', code='', _external=True))
+    send_verify_email(email, code, email_cb=url_for('account.register_valid', code='', _external=True))
 
     account_id = Account.gen_id(g._db)
     Account.create_account(g._db, account_id, email, password, 0, RoleType.DEVELOPER)
@@ -105,7 +105,7 @@ def verify_email():
     code = random_ascii_string(40)
     email = account_obj.get('email')
 
-    send_verify_email(email, code, url_for('web.register_valid', code='', _external=True))
+    send_verify_email(email, code, url_for('account.register_valid', code='', _external=True))
     Account.insert_verify_email(g._db, email, code, EmailUsageType.DEVELOPER_VERIFY, account_obj.get('id'))
 
     return MainException.OK
