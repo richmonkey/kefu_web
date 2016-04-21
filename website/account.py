@@ -5,6 +5,7 @@ from flask import Blueprint, request, g, render_template, redirect, url_for, ses
 from models import Account
 from core import EmailUsageType
 import time
+import logging
 
 def get_user(db):
     user_id = session.get('user', {}).get('id')
@@ -57,6 +58,7 @@ def register_valid():
         if 'user' in session:
             account_obj = get_user(g._db)
             verify_email = Account.get_verify_email(g._db, code, EmailUsageType.DEVELOPER_VERIFY)
+            logging.debug("verify email:%s", verify_email)
             confirm = False
             if verify_email and \
                verify_email['ctime'] + expires_in > time.time():

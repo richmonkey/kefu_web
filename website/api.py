@@ -69,9 +69,11 @@ def verify_mail():
     password = generate_password_hash(password)
  
     code = random_ascii_string(40)
+    account_id = Account.gen_id(g._db)
+
     send_verify_email(email, code, email_cb=url_for('account.register_valid', code='', _external=True))
 
-    account_id = Account.gen_id(g._db)
+    Account.insert_verify_email(g._db, email, code, EmailUsageType.DEVELOPER_VERIFY, account_id)
     Account.create_account(g._db, account_id, email, password, 0, RoleType.DEVELOPER)
 
     if 'user' not in session:
