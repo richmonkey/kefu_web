@@ -1,0 +1,53 @@
+{% extends "layout/im_with_sidebar.html" %}
+
+{% block content %}
+
+<div class="push-notice-wrapper">
+  <div class="container">
+    <div class="center-form">
+      <div class="center-section">
+        <br />
+          <div class="panel">
+            <div class="opt-bar clearfix">
+              <a href="/store/{{data.store_info.id}}/question/add" class="rt btn-s btn-success" data-action="redirect">添加</a>
+              <input type="hidden" name="" id="offset" value="{{ data.offset }}"/>
+            </div>
+            <input type="hidden" name="" id="offset" value="{{data.offset}}" />
+            <br />
+            <div class="game-table">
+              <table>
+                <tr>
+                  <th><span>ID</span></th>
+                  <th><span>问题</span></th>
+                </tr>
+                {% for item in data.list %}
+                  <tr>
+                    <td>
+                      {{item.id}}
+                    </td>
+                      <td>
+                        {{item.question}}
+                      </td>
+                  </tr>
+                {% else %}
+                  <tr>
+                    <td colspan="5"><div class="none-data">无数据</div></td>
+                  </tr>
+                {% endfor %}
+              </table>
+            </div>
+            <div class="opt-bar pagination-bar text-align-right">
+              {{ pagination('store.store_question', data.pagination, None, params={"store_id":data.store_info.id}) }}
+            </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+{% endblock %}
+
+{% block script %}
+  <script>
+    seajs.use('dist/app/im/detail/index');
+  </script>
+{% endblock %}

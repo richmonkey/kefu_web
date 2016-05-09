@@ -1,0 +1,110 @@
+{% extends "layout/im.html" %}
+
+{% block breadcrumb %}
+  <div class="breadcrumb">
+    <div class="inner-wrapper">
+      <ol>
+        <li>
+          <a href="/store">商店列表</a>
+        </li>
+        <li class="arrow">
+          <span>&gt;</span>
+        </li>
+        <li class="active">
+          <a href="/store/{{data.store_id}}/seller">问题库</a>
+        </li>
+        <li class="arrow">
+          <span>&gt;</span>
+        </li>
+        <li class="active">
+          <span>添加问题</span>
+        </li>
+      </ol>
+    </div>
+  </div>
+{% endblock %}
+
+{% block body %}
+  <div class="container">
+    {{ self.breadcrumb() }}
+    <div class="inner-wrapper">
+      <div class="one-wrapper">
+        <div class="panel">
+          <div class="app-form">
+            <div class="center-section">
+              <div class="form-1 push-add-form">
+
+                <form accept-charset="utf-8" method="post" action="/store/{{data.store_id}}/question">
+
+<table>
+    <tbody>
+
+        <tr class="">
+        <th>
+            <div class="th">
+                <label class="label-1">
+                    <span class="star">*</span>
+                    问题:
+                </label>
+            </div>
+        </th>
+        <td>
+            <div class="td ">
+
+            <input type="text" class="ipt" size="30" maxlength="80" value="" name="question" id="question" data-name="问题" data-validate="" data-required="">
+            <input type="hidden" name="" id="id" value="">
+            <p class="error">&nbsp;</p>
+
+            </div>
+        </td>
+    </tr>
+    <tr class="">
+    <th>
+        <div class="th">
+            <label class="label-1">
+                <span class="star">*</span>
+                答案:
+            </label>
+        </div>
+    </th>
+    <td>
+        <div class="td ">
+
+        <input type="text" class="ipt" size="30" maxlength="80" value="" name="answer" id="answer" data-name="答案" data-validate="" data-required="">
+
+        <p class="error">&nbsp;</p>
+
+        </div>
+    </td>
+</tr>
+
+
+
+    <tr class="">
+        <th>
+            <div class="th">
+                <label class="label-1">
+
+
+                </label>
+            </div>
+        </th>
+        <td>
+            <div class="td ">
+
+        <button type="submit" class="btn btn-info">提交</button>
+
+            </div>
+        </td>
+    </tr>
+    </tbody>
+</table>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

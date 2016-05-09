@@ -7,15 +7,16 @@ from website.blueprint_utils import login_required
 from models import Store
 from models import Group
 from models import Seller
-
+from models import Question
 import md5
 import os
 import time
-
+import logging
+import xmlrpclib
 import config
 
 store = Blueprint('store', __name__, template_folder='templates', static_folder='static')
-
+rpc = xmlrpclib.ServerProxy(config.RPC)
 
 def publish_message(rds, channel, msg):
     rds.publish(channel, msg)
@@ -195,3 +196,57 @@ def store_seller_post(store_id):
     publish_message(g.im_rds, "group_member_add", content)
     
     return redirect(url_for('.store_seller', store_id=store_id))
+
+
+@store.route("/store/<int:store_id>/question", methods = ["GET"])
+@_im_login_required
+def store_question(store_id):
+    db = g._imdb
+
+    offset = int(request.args.get('offset', 0))
+    limit = int(request.args.get('limit', 10))
+
+    rows_found = Question.get_question_count(db, store_id)
+    sellers = Question.get_page_question(db, store_id, offset, limit)
+    store_info = Store.get_store(db, store_id)
+
+    g.pagination.setdefault()
+    g.pagination.rows_found = rows_found
+    g.pagination.limit = limit
+    g.pagination.offset = offset
+
+    return render_template('store/question.html',
+                           data={'offset': offset,
+                                 'list': sellers,
+                                 'store_info': store_info,
+                                 'pagination': g.pagination,
+                                 })
+
+
+
+@store.route("/store/<int:store_id>/question", methods = ["POST"])
+@_im_login_required
+def store_question_post(store_id):
+    q = request.form.get('question', '')
+    a = request.form.get('answer', '')
+    if not q or not a:
+        return "0"
+
+    qid = Question.add(g._db, q, a, store_id)
+
+    #更新robotd的问题库
+    try:
+        rpc.refresh_questions()
+    except xmlrpclib.ProtocolError as err:
+        logging.warning("refresh questions err:%s", err)
+    except Exception as err:
+        logging.warning("refresh questions err:%s", err)
+
+    return redirect(url_for('.store_question', store_id=store_id))
+
+
+@store.route("/store/<int:store_id>/question/add", methods = ["GET"])
+@_im_login_required
+def store_question_add(store_id):
+    return render_template('store/question_add.html', data={"store_id":store_id})
+

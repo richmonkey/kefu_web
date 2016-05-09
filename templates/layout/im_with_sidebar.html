@@ -32,6 +32,9 @@
             <li {% if g.uri_path.startswith("/store/%s/seller" % data.store_info.id) %} class="actived" {%endif%}>
               <a href="/store/{{data.store_info.id}}/seller">客服人员</a>
             </li>
+            <li {% if g.uri_path.startswith("/store/%s/question" % data.store_info.id) %} class="actived" {%endif%}>
+              <a href="/store/{{data.store_info.id}}/question">问题库</a>
+            </li>
           </ul>
         </li>
       </ul>

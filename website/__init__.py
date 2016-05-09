@@ -82,3 +82,4 @@ def init_app(app):
     app.register_blueprint(api)
     app.register_blueprint(store)
     app.register_blueprint(account)
+
