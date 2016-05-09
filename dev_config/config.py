@@ -7,8 +7,6 @@ import os
 APP_MODE = 'Development'
 APP_ROOT = os.path.dirname(os.path.abspath(__file__))
 
-SECRET_KEY = 'hello mantou'
-
 SESSION_COOKIE_NAME = 'sid_dev'
 SESSION_COOKIE_DOMAIN = '192.168.33.10'
 SESSION_COOKIE_PATH = '/'
