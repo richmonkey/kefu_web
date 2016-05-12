@@ -51,7 +51,7 @@
 - 是否认证：是
 - 请求内容: application/x-www-form-urlencoded
 
-    name=销售人员名称&password=登录密码
+    name=销售人员名称&password=登录密码&number=登录名
 
 ##获取销售人员列表
 
