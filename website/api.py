@@ -249,6 +249,9 @@ def update_seller(store_id, seller_id):
     if not name and not password:
         return INVALID_PARAM()
 
+    if password:
+        password = md5.new(password).hexdigest()
+
     db.begin()
 
     if name:
