@@ -40,7 +40,6 @@ FIX_MODE = 1
 ONLINE_MODE = 2
 BROADCAST_MODE = 3
 
-store_id=55
 #设置客服模式
 url = URL + "/stores/%s"%store_id
 r = requests.patch(url, data={"mode":BROADCAST_MODE}, headers=headers)
@@ -53,6 +52,10 @@ print r.content
 obj = json.loads(r.content)
 seller_id = obj['seller_id']
 
+#修改销售名称和密码
+url = URL + "/stores/%s/sellers/%s"%(store_id, seller_id)
+r = requests.patch(url, data={"name":"test_name", "password":"123456"}, headers = headers)
+print "set name/password:", r.status_code
 
 #获取销售员列表
 url = URL + "/stores/%s/sellers"%store_id

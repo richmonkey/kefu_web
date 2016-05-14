@@ -16,6 +16,18 @@ class Seller(object):
         logging.debug("delete seller rows:%s", r.rowcount)
 
     @classmethod
+    def set_seller_name(cls, db, store_id, seller_id, name):
+        sql = "UPDATE seller SET name=%s WHERE id=%s"
+        r = db.execute(sql, (name, seller_id))
+        return r.rowcount
+
+    @classmethod
+    def set_seller_password(cls, db, store_id, seller_id, password):
+        sql = "UPDATE seller SET password=%s WHERE id=%s"
+        r = db.execute(sql, (password, seller_id))
+        return r.rowcount
+
+    @classmethod
     def get_sellers(cls, db, store_id):
         sql = "SELECT id, name, number FROM seller WHERE store_id=%s"
         r = db.execute(sql, store_id)

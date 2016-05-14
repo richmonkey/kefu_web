@@ -46,12 +46,28 @@
     [{"id":"商店id", "name":"商店名称"},....]
     
 
-##添加销售人员名称
+##添加销售人员
 - 请求地址：** POST /api/stores/{store_id}/sellers**
 - 是否认证：是
 - 请求内容: application/x-www-form-urlencoded
 
     name=销售人员名称&password=登录密码&number=登录名
+
+- 成功响应：200
+
+        {
+            "seller_id":"客服id(整型)"
+        }
+
+
+###修改销售人员名称和密码
+- 请求地址：** PATCH /api/stores/{store_id}/sellers/{seller_id}**
+- 是否认证：是
+- 请求内容: application/x-www-form-urlencoded
+
+    name=销售人员名称&password=登录密码
+
+- 成功响应：200
 
 ##获取销售人员列表
 

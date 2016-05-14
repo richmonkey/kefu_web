@@ -217,6 +217,9 @@ def add_seller(store_id):
 def get_sellers(store_id):
     db = g._imdb
     sellers = Seller.get_sellers(db, store_id)
+    for s in sellers:
+        if 'number' in s and not s['number']:
+            s.pop('number')
     return make_response(200, sellers)
 
 @api.route("/stores/<int:store_id>/sellers/<int:seller_id>", methods = ["DELETE"])
@@ -234,6 +237,27 @@ def delete_seller(store_id, seller_id):
     content = "%d,%d"%(group_id, seller_id)
     publish_message(g.im_rds, "group_member_remove", content)
 
+    return ""
+
+@api.route("/stores/<int:store_id>/sellers/<int:seller_id>", methods = ["PATCH"])
+@require_basic_auth
+def update_seller(store_id, seller_id):
+    db = g._imdb
+    form = request.form
+    name = form.get('name', '')
+    password = form.get('password', '')
+    if not name and not password:
+        return INVALID_PARAM()
+
+    db.begin()
+
+    if name:
+        Seller.set_seller_name(db, store_id, seller_id, name)
+    if password:
+        Seller.set_seller_password(db, store_id, seller_id, password)
+
+    db.commit()
+        
     return ""
 
 ######################store#############################
