@@ -3,6 +3,7 @@ from flask import Blueprint, session, request, g, render_template, url_for, abor
 
 from website.web import web
 from website.blueprint_utils import login_required
+from werkzeug.security import generate_password_hash, check_password_hash
 
 from models import Store
 from models import Group
@@ -178,13 +179,14 @@ def store_seller_post(store_id):
     name = form.get('name', '')
     password = form.get('password', '')
     number = form.get('number', '')
+
     if not name or not password or not store_id:
         return INVALID_PARAM()
         
     if not number:
         number = None
-    password = md5.new(password).hexdigest()
 
+    password = generate_password_hash(password)
     group_id = Store.get_store_gid(db, store_id)
 
     db.begin()

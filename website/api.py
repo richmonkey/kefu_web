@@ -191,13 +191,21 @@ def add_seller(store_id):
     form = request.form
     name = form.get('name', '')
     password = form.get('password', '')
+    md5_password = form.get('md5_password', '')
     number = form.get('number', '')
-    if not name or not password or not store_id:
+    is_password_empty = not password and not md5_password
+
+    if not name or is_password_empty or not store_id:
         return INVALID_PARAM()
         
     if not number:
         number = None
-    password = md5.new(password).hexdigest()
+
+    if password:
+        password = generate_password_hash(password)
+    elif md5_password:
+        password = md5_password
+
 
     group_id = Store.get_store_gid(db, store_id)
 
@@ -246,11 +254,15 @@ def update_seller(store_id, seller_id):
     form = request.form
     name = form.get('name', '')
     password = form.get('password', '')
-    if not name and not password:
+    md5_password = form.get('md5_password', '')
+    is_password_empty = not password and not md5_password
+    if not name and is_password_empty:
         return INVALID_PARAM()
 
     if password:
-        password = md5.new(password).hexdigest()
+        password = generate_password_hash(password)
+    elif md5_password:
+        password = md5_password
 
     db.begin()
 

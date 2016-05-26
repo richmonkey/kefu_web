@@ -51,7 +51,12 @@
 - 是否认证：是
 - 请求内容: application/x-www-form-urlencoded
 
-    name=销售人员名称&password=登录密码&number=登录名
+    name=销售人员名称&number=登录名&password=登录密码&md5_password=登录密码的md5
+
+
+- 参数说明:
+
+    password,md5_password每次只能传一个
 
 - 成功响应：200
 
@@ -65,7 +70,7 @@
 - 是否认证：是
 - 请求内容: application/x-www-form-urlencoded
 
-    name=销售人员名称&password=登录密码
+    name=销售人员名称&password=登录密码&md5_password=登录密码的md5
 
 - 成功响应：200
 
