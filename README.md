@@ -51,7 +51,7 @@
 - 是否认证：是
 - 请求内容: application/x-www-form-urlencoded
 
-    name=销售人员名称&number=登录名&password=登录密码&md5_password=登录密码的md5
+    name=销售人员名称&number=登录名&password=登录密码&md5_password=登录密码的md5&salt=密码的盐码
 
 
 - 参数说明:
@@ -70,7 +70,7 @@
 - 是否认证：是
 - 请求内容: application/x-www-form-urlencoded
 
-    name=销售人员名称&password=登录密码&md5_password=登录密码的md5
+    name=销售人员名称&password=登录密码&md5_password=登录密码的md5&salt=密码的盐码
 
 - 成功响应：200
 

@@ -12,6 +12,7 @@ import threading
 import json
 import sys
 import base64
+import md5
 
 #URL = "http://192.168.33.10"
 URL = "http://dev.kefu.gobelieve.io/api"
@@ -45,16 +46,22 @@ url = URL + "/stores/%s"%store_id
 r = requests.patch(url, data={"mode":BROADCAST_MODE}, headers=headers)
 print "set mode:", r.status_code
 
+
+salt = "123456"
 #创建seller
 url = URL + "/stores/%s/sellers"%store_id
-r = requests.post(url, data={"name":"test", "password":"111111"}, headers = headers)
+password = md5.new("111111").hexdigest()
+password = md5.new(password+salt).hexdigest()
+r = requests.post(url, data={"name":"test", "md5_password":password, "salt":salt}, headers = headers)
 print r.content
 obj = json.loads(r.content)
 seller_id = obj['seller_id']
 
 #修改销售名称和密码
 url = URL + "/stores/%s/sellers/%s"%(store_id, seller_id)
-r = requests.patch(url, data={"name":"test_name", "password":"123456"}, headers = headers)
+password = md5.new("123456").hexdigest()
+password = md5.new(password+salt).hexdigest()
+r = requests.patch(url, data={"name":"test_name", "md5_password":password, "salt":salt}, headers = headers)
 print "set name/password:", r.status_code
 
 #获取销售员列表
@@ -66,7 +73,7 @@ print r.content
 url = URL + "/stores/%s/sellers/%s"%(store_id, seller_id)
 r = requests.delete(url, headers = headers)
 print r.status_code
-
+ 
 #删除store
 url = URL + "/stores/%s"%store_id
 r = requests.delete(url, headers = headers)
