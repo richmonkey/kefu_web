@@ -24,6 +24,12 @@ LOGGER = init_logger(__name__)
 
 api = Blueprint('api', __name__, url_prefix='/api')
 
+
+MODE_FIX = 1
+MODE_ONLINE = 2
+MODE_BROADCAST = 3
+default_mode = MODE_FIX
+
 ##################user######################
 @api.route('/login', methods=['POST'])
 def login_post():
@@ -187,6 +193,7 @@ def reset_password():
 @api.route("/stores/<int:store_id>/sellers", methods = ["POST"])
 @require_basic_auth
 def add_seller(store_id):
+    rds = g.im_rds
     db = g._imdb
     form = request.form
     name = form.get('name', '')
@@ -212,11 +219,15 @@ def add_seller(store_id):
 
     db.begin()
     seller_id = Seller.add_seller(db, name, password, store_id, group_id, number)
-    Group.add_group_member(db, group_id, seller_id)
+    if group_id:
+        Group.add_group_member(db, group_id, seller_id)
     db.commit()
 
-    content = "%d,%d"%(group_id, seller_id)
-    publish_message(g.im_rds, "group_member_add", content)
+    Store.add_seller_id(rds, store_id, seller_id)
+
+    if group_id:
+        content = "%d,%d"%(group_id, seller_id)
+        publish_message(g.im_rds, "group_member_add", content)
 
     obj = {"seller_id":seller_id}
     return make_response(200, obj)
@@ -234,17 +245,22 @@ def get_sellers(store_id):
 @api.route("/stores/<int:store_id>/sellers/<int:seller_id>", methods = ["DELETE"])
 @require_basic_auth
 def delete_seller(store_id, seller_id):
+    rds = g.im_rds
     db = g._imdb
 
     group_id = Store.get_store_gid(db, store_id)
 
     db.begin()
     Seller.delete_seller(db, store_id, seller_id)
-    Group.delete_group_member(db, group_id, seller_id)
+    if group_id:
+        Group.delete_group_member(db, group_id, seller_id)
     db.commit()
 
-    content = "%d,%d"%(group_id, seller_id)
-    publish_message(g.im_rds, "group_member_remove", content)
+    Store.delete_seller_id(rds, store_id, seller_id)
+
+    if group_id:
+        content = "%d,%d"%(group_id, seller_id)
+        publish_message(g.im_rds, "group_member_remove", content)
 
     return ""
 
@@ -288,16 +304,21 @@ def add_store():
     if not name:
         return INVALID_PARAM()
 
+    mode = default_mode
     db.begin()
-    gid = Group.create_group(db, appid, 0, name, False)
-    store_id = Store.create_store(db, name, gid, developer_id)
+    if mode == MODE_BROADCAST:
+        gid = Group.create_group(db, appid, 0, name, False)
+    else:
+        gid = 0
+    store_id = Store.create_store(db, name, gid, mode, developer_id)
     db.commit()
 
     #将名称存储redis,用于后台推送
     Store.set_store_name(g.im_rds, store_id, name)
 
-    content = "%d,%d,%d"%(gid, appid, 0)
-    publish_message(g.im_rds, "group_create", content)
+    if gid:
+        content = "%d,%d,%d"%(gid, appid, 0)
+        publish_message(g.im_rds, "group_create", content)
 
     obj = {"store_id":store_id}
     return make_response(200, obj)
@@ -305,12 +326,18 @@ def add_store():
 @api.route("/stores/<int:store_id>", methods=["DELETE"])
 @require_basic_auth
 def delete_store(store_id):
+    rds = g.im_rds
     db = g._imdb
     group_id = Store.get_store_gid(db, store_id)
+
     Store.delete_store(db, store_id, group_id)
 
-    content = "%d"%group_id
-    publish_message(g.im_rds, "group_disband", content)
+    Store.delete_store_name(rds, store_id)
+    Store.delete_store_seller(rds, store_id)
+
+    if group_id:
+        content = "%d"%group_id
+        publish_message(g.im_rds, "group_disband", content)
 
     return ""
 

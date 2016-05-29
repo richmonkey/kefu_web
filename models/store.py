@@ -8,9 +8,29 @@ class Store(object):
         rds.hset(key, "name", name)
 
     @classmethod
-    def create_store(cls, db, name, group_id, developer_id):
-        sql = "INSERT INTO store(name, group_id, developer_id) VALUES(%s, %s, %s)"
-        r = db.execute(sql, (name, group_id, developer_id))
+    def add_seller_id(cls, rds, store_id, seller_id):
+        key = "stores_seller_%s"%store_id
+        rds.sadd(key, seller_id)
+
+    @classmethod
+    def delete_seller_id(cls, rds, store_id, seller_id):
+        key = "stores_seller_%s"%store_id
+        rds.srem(key, seller_id)
+
+    @classmethod
+    def delete_store_seller(cls, rds, store_id):
+        key = "stores_seller_%s"%store_id
+        rds.delete(key)
+
+    @classmethod
+    def delete_store_name(cls, rds, store_id):
+        key = "stores_%d"%store_id
+        rds.delete(key)
+
+    @classmethod
+    def create_store(cls, db, name, group_id, mode, developer_id):
+        sql = "INSERT INTO store(name, group_id, mode, developer_id) VALUES(%s, %s, %s, %s)"
+        r = db.execute(sql, (name, group_id, mode, developer_id))
         store_id = r.lastrowid
         db.commit()
         return store_id
@@ -27,6 +47,10 @@ class Store(object):
         r = db.execute(sql, group_id)
         logging.debug("delete group rows:%s", r.rowcount)
 
+        sql = "DELETE FROM seller WHERE store_id=%s"
+        r = db.execute(sql, store_id)
+        logging.debug("delete seller rows:%s", r.rowcount)
+        
         sql = "DELETE FROM store WHERE id=%s"
         r = db.execute(sql, store_id)
         logging.debug("delete store rows:%s", r.rowcount)

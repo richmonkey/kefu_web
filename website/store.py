@@ -16,6 +16,11 @@ import logging
 import xmlrpclib
 import config
 
+MODE_FIX = 1
+MODE_ONLINE = 2
+MODE_BROADCAST = 3
+default_mode = MODE_FIX
+
 store = Blueprint('store', __name__, template_folder='templates', static_folder='static')
 rpc = xmlrpclib.ServerProxy(config.RPC)
 
@@ -53,6 +58,7 @@ def store_index():
     store 模块首页
 
     """
+    print request.args
     offset = int(request.args.get('offset', 0))
     limit = int(request.args.get('limit', 10))
 
@@ -149,16 +155,21 @@ def store_add_post():
     if not name:
         return INVALID_PARAM()
 
+    mode = default_mode
     db.begin()
-    gid = Group.create_group(db, appid, 0, name, False)
-    store_id = Store.create_store(db, name, gid, developer_id)
+    if mode == MODE_BROADCAST:
+        gid = Group.create_group(db, appid, 0, name, False)
+    else:
+        gid = 0
+    store_id = Store.create_store(db, name, gid, mode, developer_id)
     db.commit()
 
     #将名称存储redis,用于后台推送
     Store.set_store_name(g.im_rds, store_id, name)
 
-    content = "%d,%d,%d"%(gid, appid, 0)
-    publish_message(g.im_rds, "group_create", content)
+    if gid:
+        content = "%d,%d,%d"%(gid, appid, 0)
+        publish_message(g.im_rds, "group_create", content)
 
     obj = {"store_id":store_id}
 
@@ -173,6 +184,7 @@ def store_seller_post(store_id):
 
     """
     db = g._imdb
+    rds = g.im_rds
     developer_id = session['user']['id']
 
     form = request.form
@@ -191,11 +203,15 @@ def store_seller_post(store_id):
 
     db.begin()
     seller_id = Seller.add_seller(db, name, password, store_id, group_id, number)
-    Group.add_group_member(db, group_id, seller_id)
+    if group_id:
+        Group.add_group_member(db, group_id, seller_id)
     db.commit()
 
-    content = "%d,%d"%(group_id, seller_id)
-    publish_message(g.im_rds, "group_member_add", content)
+    Store.add_seller_id(rds, store_id, seller_id)
+
+    if group_id:
+        content = "%d,%d"%(group_id, seller_id)
+        publish_message(g.im_rds, "group_member_add", content)
     
     return redirect(url_for('.store_seller', store_id=store_id))
 

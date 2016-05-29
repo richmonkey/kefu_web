@@ -87,11 +87,3 @@ def price():
 def doc():
     return redirect(url_for('web.static', filename='docs/im/Server.html'))
 
-
-@web.route('/web/store')
-def store_index():
-    """
-    store 模块首页
-
-    """
-    return redirect(url_for('store.store_index'))
