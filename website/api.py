@@ -214,11 +214,11 @@ def add_seller(store_id):
     elif md5_password:
         password = "%s:%s"%(salt,md5_password)
 
-
+    logging.debug("seller name:%s number:%s password md5:%s", name, number, md5_password)
     group_id = Store.get_store_gid(db, store_id)
 
     db.begin()
-    seller_id = Seller.add_seller(db, name, password, store_id, group_id, number)
+    seller_id = Seller.add_seller(db, name, password, store_id, number)
     if group_id:
         Group.add_group_member(db, group_id, seller_id)
     db.commit()
