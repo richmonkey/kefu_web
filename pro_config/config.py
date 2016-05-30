@@ -29,7 +29,6 @@ REDIS_PASSWORD = None
 
 
 MYSQL_HOST = "rdsme36vin2uqrn.mysql.rds.aliyuncs.com"
-MYSQL_HOST = "10.251.43.254"
 MYSQL_PORT = 3306
 MYSQL_AUTOCOMMIT = True
 MYSQL_CHARSET = 'utf8'
