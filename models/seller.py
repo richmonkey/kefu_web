@@ -3,9 +3,9 @@ import logging
 
 class Seller(object):
     @classmethod
-    def add_seller(cls, db, name, password, store_id, group_id, number=None):
-        sql = "INSERT INTO seller(name, password, number, store_id) VALUES(%s, %s, %s, %s)"
-        r = db.execute(sql, (name, password, number, store_id))
+    def add_seller(cls, db, name, password, store_id, number=None, checked=1):
+        sql = "INSERT INTO seller(name, password, number, store_id, email_checked) VALUES(%s, %s, %s, %s, %s)"
+        r = db.execute(sql, (name, password, number, store_id, checked))
         seller_id = r.lastrowid
         return seller_id
 
