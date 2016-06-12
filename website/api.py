@@ -264,7 +264,7 @@ def delete_seller(store_id, seller_id):
 
     return ""
 
-@api.route("/stores/<int:store_id>/sellers/<int:seller_id>", methods = ["PATCH"])
+@api.route("/stores/<int:store_id>/sellers/<int:seller_id>", methods = ["PATCH", "POST"])
 @require_basic_auth
 def update_seller(store_id, seller_id):
     db = g._imdb
