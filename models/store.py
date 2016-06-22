@@ -9,13 +9,23 @@ class Store(object):
 
     @classmethod
     def add_seller_id(cls, rds, store_id, seller_id):
+        #set
         key = "stores_seller_%s"%store_id
         rds.sadd(key, seller_id)
+
+        #sorted set
+        key = "stores_zseller_%s"%store_id
+        rds.zadd(key, 0, seller_id)
+        
 
     @classmethod
     def delete_seller_id(cls, rds, store_id, seller_id):
         key = "stores_seller_%s"%store_id
         rds.srem(key, seller_id)
+
+        key = "stores_zseller_%s"%store_id
+        rds.zrem(key, seller_id)
+
 
     @classmethod
     def delete_store_seller(cls, rds, store_id):
