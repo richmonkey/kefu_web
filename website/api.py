@@ -28,7 +28,8 @@ api = Blueprint('api', __name__, url_prefix='/api')
 MODE_FIX = 1
 MODE_ONLINE = 2
 MODE_BROADCAST = 3
-default_mode = MODE_FIX
+MODE_ORDER = 4
+default_mode = MODE_ORDER
 
 ##################user######################
 @api.route('/login', methods=['POST'])

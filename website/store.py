@@ -19,7 +19,8 @@ import config
 MODE_FIX = 1
 MODE_ONLINE = 2
 MODE_BROADCAST = 3
-default_mode = MODE_FIX
+MODE_ORDER = 4
+default_mode = MODE_ORDER
 
 store = Blueprint('store', __name__, template_folder='templates', static_folder='static')
 
